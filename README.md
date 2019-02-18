@@ -1,7 +1,5 @@
-{{cookiecutter.plant_seed_classification}}
+Plant seed classification
 ==============================
-
-{{cookiecutter.description}}
 
 Project Organization
 ------------
