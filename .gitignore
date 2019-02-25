@@ -6,7 +6,8 @@ __pycache__/
 *.so
 
 # Images
-*.png 
+data/raw/
+data/processed/ 
 *.jpg
 
 # Distribution / packaging
