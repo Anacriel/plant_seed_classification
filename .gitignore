@@ -5,6 +5,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Images
+*.png 
+*.jpg
+
 # Distribution / packaging
 .Python
 env/
@@ -122,3 +126,4 @@ tests/__pycache__/*
 ### Pycharm ignore
 *.xml
 *.iml
+venv
