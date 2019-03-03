@@ -40,7 +40,7 @@ def plot_class(label, images, rows=3, cols=3):
 
 
 def plot_raw_grid(images, cols=12):
-    fig = plt.figure(1, (8, 8))
+    fig = plt.figure(1, (8, 12))
     grid = ImageGrid(fig, 111,  # similar to subplot(111)
                      nrows_ncols=(cols, cols),
                      axes_pad=0.05,  # pad between axes in inch.
@@ -50,6 +50,8 @@ def plot_raw_grid(images, cols=12):
     for label, val in images.items():
         n = 0
         for i in range(cols):
+           # if k == 12:
+                #return
             ax = grid[k]
             if i == 0:
                 ax.text(-1000, 112, label, verticalalignment='center')
@@ -111,13 +113,13 @@ def create_mask_for_plant(image):
 
 
 def segment_plant(images, sharpen=True):
-    seg_images = {}
+    seg_images = {}                     # RW def_dict
     for label, val in images.items():
         seg_images[label] = []
         for n in range(len(images[label])):
             mask = create_mask_for_plant(images[label][n])
             seg_image = cv2.bitwise_and(images[label][n], images[label][n], mask=mask)
-            if sharpen is True:
+            if sharpen:
                 image = seg_image
                 image_blurred = cv2.GaussianBlur(image, (0, 0), 3)
                 image_sharp = cv2.addWeighted(image, 1.5, image_blurred, -0.5, 0)
