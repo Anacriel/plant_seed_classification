@@ -9,20 +9,17 @@ from mpl_toolkits.axes_grid1 import ImageGrid
 
 def read_images(path):
     total = 0
-    images = {}
-    for class_dir_name in os.listdir(path):  # total images per class
-        if '.DS_Store' != class_dir_name:
-            class_dir_path = os.path.join(path, class_dir_name)
-            class_label = class_dir_name
+    images = []
+    titles = []
 
-            images[class_label] = []
-            for image_path in glob(os.path.join(class_dir_path, "*.png")):
-                image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
-                images[class_label].append(image_bgr)
-                total = total + 1
+    for image_path in glob(os.path.join(path, "*.png")):
+        titles.append(os.path.basename(image_path))
+        image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        images.append(image_bgr)
+        total = total + 1
 
     print(total)
-    return images
+    return images, titles
 
 
 def plot_class(label, images, rows=3, cols=3):
@@ -63,14 +60,11 @@ def plot_raw_grid(images, cols=12):
 
 
 def resize_images(path, height=200, width=200):
-    images = {}
-    for class_dir_name in os.listdir(path):  # total images per class
-        if '.DS_Store' != class_dir_name:
-            class_dir_path = os.path.join(path, class_dir_name)
-            for image_path in glob(os.path.join(class_dir_path, "*.png")):
-                image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
-                resized_img = cv2.resize(image_bgr, (height, width))
-                cv2.imwrite(image_path, resized_img)
+    images = []
+    for image_path in glob(os.path.join(path, "*.png")):
+        image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        resized_img = cv2.resize(image_bgr, (height, width))
+        cv2.imwrite(image_path, resized_img)
 
 
 def create_mask_for_plant(image):
@@ -87,20 +81,18 @@ def create_mask_for_plant(image):
     return mask
 
 
-def segment_plant(images, sharpen=True):
-    seg_images = {}                     # RW def_dict
-    for label, val in images.items():
-        seg_images[label] = []
-        for n in range(len(images[label])):
-            mask = create_mask_for_plant(images[label][n])
-            seg_image = cv2.bitwise_and(images[label][n], images[label][n], mask=mask)
-            if sharpen:
-                image = seg_image
-                image_blurred = cv2.GaussianBlur(image, (0, 0), 3)
-                image_sharp = cv2.addWeighted(image, 1.5, image_blurred, -0.5, 0)
-                seg_image = image_sharp
+def segment_plant(images, sharpen=True):                    # RW def_dict
+    seg_images = []
+    for n in range(len(images)):
+        mask = create_mask_for_plant(images[n])
+        seg_image = cv2.bitwise_and(images[n], images[n], mask=mask)
+        if sharpen:
+            image = seg_image
+            image_blurred = cv2.GaussianBlur(image, (0, 0), 3)
+            image_sharp = cv2.addWeighted(image, 1.5, image_blurred, -0.5, 0)
+            seg_image = image_sharp
 
-            seg_images[label].append(seg_image)
+        seg_images.append(seg_image)
 
     return seg_images
 
@@ -135,56 +127,43 @@ def main():
     data_dir = '../../data/raw/'
     proc_data_dir = '../../data/processed/'
 
-    test_image_dir = os.path.join(data_dir, 'test')
-    train_image_dir = os.path.join(data_dir, 'train')
+    # Called only once, don't need any more...
+    #resize_images(proc_data_dir + 'test')
 
     # Process resized pics (300x300px)
-
-    # Called only once, don't need any more...
-    #resize_images(proc_data_dir + 'train')
-
-    images_per_class = read_images(proc_data_dir + 'train')
-
-
-    # for key, value in images_per_class.items():
-    #     print("{} - {}".format(key, len(value)) + ' images')
-
-    # plot_raw_grid(images_per_class)
+    images_per_class, titles = read_images(proc_data_dir + 'test')
 
     images_segmented = segment_plant(images_per_class)
-    # plot_raw_grid(images_segmented)
+    title = titles
     areas = []
     larges_contour_areas = []
-    labels = []
     nb_of_contours = []
     images_height = []
     images_width = []
 
-    for class_label in images_per_class.keys():
-        for image in images_per_class[class_label]:
-            mask = create_mask_for_plant(image)
-            contours = find_contours(mask)
+    for image in images_per_class:
+        mask = create_mask_for_plant(image)
+        contours = find_contours(mask)
 
-            area = calculate_contours_area(contours)
-            largest_area = calculate_largest_contour_area(contours)
-            height, width, channels = image.shape
+        area = calculate_contours_area(contours)
+        largest_area = calculate_largest_contour_area(contours)
+        height, width, channels = image.shape
 
-            images_height.append(height)
-            images_width.append(width)
-            areas.append(area)
-            nb_of_contours.append(len(contours))
-            larges_contour_areas.append(largest_area)
-            labels.append(class_label)
+        images_height.append(height)
+        images_width.append(width)
+        areas.append(area)
+        nb_of_contours.append(len(contours))
+        larges_contour_areas.append(largest_area)
 
     features_df = pd.DataFrame()
-    features_df["label"] = labels
+    features_df["title"] = title
     features_df["area"] = areas
     features_df["largest_area"] = larges_contour_areas
     features_df["number_of_components"] = nb_of_contours
     features_df["height"] = images_height
     features_df["width"] = images_width
 
-    features_df.to_csv("features.csv", sep='\t', encoding='utf-8')
+    features_df.to_csv("test_data.csv", sep='\t', encoding='utf-8')
 
 
 if __name__ == '__main__':

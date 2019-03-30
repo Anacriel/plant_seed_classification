@@ -13,3 +13,10 @@ python-dotenv>=0.5.1
 # backwards compatibility
 pathlib2
 {% endif %}
+
+pandas
+matplotlib
+scikit-learn
+scikit-image
+opencv-python
+numpy
