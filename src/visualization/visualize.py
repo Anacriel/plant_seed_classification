@@ -86,6 +86,7 @@ def create_mask_for_plant(image):
 
 
 def segment_plant(images, data_type='train', sharpen=True):
+    seg_images = images
     if data_type == 'train':
         seg_images = defaultdict(list)
         for label, val in images.items():
@@ -95,7 +96,9 @@ def segment_plant(images, data_type='train', sharpen=True):
                 if sharpen:
                     seg_image = sharpen_image(seg_image)
 
+                seg_image[mask == 0] = 255
                 seg_images[label].append(seg_image)
+
     elif data_type == 'test':
         seg_images = []
         for n in range(len(images)):
@@ -103,7 +106,9 @@ def segment_plant(images, data_type='train', sharpen=True):
             seg_image = cv2.bitwise_and(images[n], images[n], mask=mask)
             if sharpen:
                 seg_image = sharpen_image(seg_image)
-
+            seg_image[mask == 0] = 255
+            #with np.printoptions(threshold=np.inf):
+                #print(mask)
             seg_images.append(seg_image)
 
     return seg_images
