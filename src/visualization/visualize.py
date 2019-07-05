@@ -61,18 +61,8 @@ def plot_raw_grid(images, cols=12):
             k = k + 1
 
 
-def resize_images(path, height=200, width=200):
-    for class_dir_name in os.listdir(path):  # total images per class
-        if '.DS_Store' != class_dir_name:
-            class_dir_path = os.path.join(path, class_dir_name)
-            for image_path in glob(os.path.join(class_dir_path, "*.png")):
-                image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
-                resized_img = cv2.resize(image_bgr, (height, width))
-                cv2.imwrite(image_path, resized_img)
-
-
 def create_mask_for_plant(image):
-    sensitivity = 35
+    sensitivity = 35  # 35 is preferable
     lower_hsv = np.array([60 - sensitivity, 100, 50])
     upper_hsv = np.array([60 + sensitivity, 255, 255])
 
@@ -96,6 +86,7 @@ def segment_plant(images, data_type='train', sharpen=True):
                 if sharpen:
                     seg_image = sharpen_image(seg_image)
 
+                # change background color to white
                 seg_image[mask == 0] = 255
                 seg_images[label].append(seg_image)
 

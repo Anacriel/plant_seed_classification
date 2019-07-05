@@ -20,3 +20,4 @@ scikit-learn
 scikit-image
 opencv-python
 numpy
+mahotas
