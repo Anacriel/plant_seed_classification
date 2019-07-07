@@ -22,6 +22,7 @@ def read_images(path, data_type='train'):
 
             for image_path in glob(os.path.join(class_dir_path, "*.png")):
                 image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
+                image_bgr = cv2.resize(image_bgr, (100, 100), interpolation=cv2.INTER_AREA)
                 images[class_label].append(image_bgr)
                 total = total + 1
 
@@ -34,6 +35,7 @@ def read_images(path, data_type='train'):
         for image_path in glob(os.path.join(path, "*.png")):
             titles.append(os.path.basename(image_path))
             image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
+            image_bgr = cv2.resize(image_bgr, (100, 100), interpolation=cv2.INTER_AREA)
             images.append(image_bgr)
             total = total + 1
 
@@ -63,13 +65,16 @@ def plot_raw_grid(images, cols=12):
 
 def create_mask_for_plant(image):
     sensitivity = 35  # 35 is preferable
-    lower_hsv = np.array([60 - sensitivity, 100, 50])
-    upper_hsv = np.array([60 + sensitivity, 255, 255])
+    #lower_hsv = np.array([60 - sensitivity, 100, 50])
+    #upper_hsv = np.array([60 + sensitivity, 255, 255])
+
+    lower_hsv = np.array([30, 100, 50])
+    upper_hsv = np.array([85, 255, 255])
 
     image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
     mask = cv2.inRange(image_hsv, lower_hsv, upper_hsv)
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11, 11))
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15))
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
     return mask
