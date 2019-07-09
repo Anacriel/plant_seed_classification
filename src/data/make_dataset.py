@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from glob import glob
 
 
-def get_images(input_path, height=100, width=100):
+def get_images(input_path, height=200, width=200):
     images = []
     labels = []
     for class_dir_name in os.listdir(input_path):
@@ -117,14 +117,27 @@ def create_dataset_added_features(images, labels, kind, to_dataframe=True):
         # Reduce noise
         images[i] = cv2.fastNlMeansDenoisingColored(images[i], None, 5, 5, 5, 5)
 
-        # Delete background
-        mask = vs.create_mask_for_plant(images[i])
+        # Delete background (prev)
+        #mask = vs.create_mask_for_plant(images[i])
+        #seg_image = cv2.bitwise_and(images[i], images[i], mask=mask)
+        #seg_image = vs.sharpen_image(seg_image)
+        #seg_image[mask == 0] = 255
 
-        seg_image = cv2.bitwise_and(images[i], images[i], mask=mask)
-        seg_image = vs.sharpen_image(seg_image)
-        seg_image[mask == 0] = 255
+        blur = cv2.GaussianBlur(images[i], (3, 3), 2)
+        hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
+        lower_green = np.array([22, 60, 0])  # second 75
+        upper_green = np.array([150, 255, 255])
+        mask = cv2.inRange(hsv, lower_green, upper_green)
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        opened_mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+        masked_img = cv2.bitwise_and(images[i], images[i], mask=opened_mask)
 
-        img = cv2.cvtColor(seg_image, cv2.COLOR_BGR2RGB)
+        masked_img[mask == 0] = 255
+
+        kernel = np.ones((2, 2), np.uint8)
+        dilation = cv2.dilate(masked_img, kernel, iterations=1)
+
+        img = cv2.cvtColor(dilation, cv2.COLOR_BGR2RGB)
         gs = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
         contours = bf.find_contours(mask)
