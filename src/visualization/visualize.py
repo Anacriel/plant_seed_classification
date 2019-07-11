@@ -45,129 +45,44 @@ def read_images(path, data_type='train'):
         return images, titles
 
 
-def plot_raw_grid(images, cols=12):
-    fig = plt.figure(1, (8, 12))
+def plot_raw_grid(images, labels, cols=12):
+    fig = plt.figure(1, (8, 8))
     grid = ImageGrid(fig, 111,  # similar to subplot(111)
                      nrows_ncols=(cols, cols),
                      axes_pad=0.05)
-    k = 0
-    for label, val in images.items():
-        n = 0
-        for i in range(cols):
-            ax = grid[k]
-            if i == 0:
-                ax.text(-1000, 112, label, verticalalignment='center')
-            img = images[label][n]
-            resized_img = cv2.resize(img, (240, 240))
-            ax.imshow(resized_img)
+    n = 0
+    for str_i in range(cols):
+        for col_i in range(cols):
+            ax = grid[n]
+            if col_i == 0:
+                ax.text(-1000, 112, labels[n], verticalalignment='center')
+            img = images[n]
+            ax.imshow(img)
             ax.axis('off')
+            str_i = str_i + 1
             n = n + 1
-            k = k + 1
 
 
 def create_mask_for_plant(image):
-    #sensitivity = 35  # 35 is preferable
-    #lower_hsv = np.array([60 - sensitivity, 100, 50])
-    #upper_hsv = np.array([60 + sensitivity, 255, 255])
+    blur = cv2.GaussianBlur(image, (3, 3), 2)
 
-    ###
-    blur = cv2.GaussianBlur(image, (5, 5), 2)
-    image_hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-    lower_hsv = np.array([25, 65, 0])
-    upper_hsv = np.array([190, 255, 255])
-    ###
+    hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
+    lower_green = np.array([22, 60, 0])  # second 75
+    upper_green = np.array([150, 255, 255])
 
-    #image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-
-    mask = cv2.inRange(image_hsv, lower_hsv, upper_hsv)
+    mask = cv2.inRange(hsv, lower_green, upper_green)
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    closed_mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
-    return mask
-
-
-def create_mask_for_plant_slic(image):
-    sensitivity = 35  # 35 is preferable
-    lower_hsv = np.array([60 - sensitivity, 100, 50])
-    upper_hsv = np.array([60 + sensitivity, 255, 255])
-
-    image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-
-    mask = cv2.inRange(image_hsv, lower_hsv, upper_hsv)
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-
-    return mask
+    return closed_mask
 
 
-def segment_plant(images, data_type='train', sharpen=True):
-    seg_images = images
-    if data_type == 'train':
-        seg_images = defaultdict(list)
-        for label, val in images.items():
-            for n in range(len(images[label])):
-                mask = create_mask_for_plant_slic(images[label][n])
-                seg_image = cv2.bitwise_and(images[label][n], images[label][n], mask=mask)
-                if sharpen:
-                    seg_image = sharpen_image(seg_image)
+def segment_plant(image):
+    mask = create_mask_for_plant(image)
+    masked_img = cv2.bitwise_and(image, image, mask=mask)
+    masked_img[mask == 0] = 255
 
-                # change background color to white
-                seg_image[mask == 0] = 255
-                seg_images[label].append(seg_image)
-
-    elif data_type == 'test':
-        seg_images = []
-        for n in range(len(images)):
-            mask = create_mask_for_plant_slic(images[n])
-            seg_image = cv2.bitwise_and(images[n], images[n], mask=mask)
-            if sharpen:
-                seg_image = sharpen_image(seg_image)
-            seg_image[mask == 0] = 255
-            seg_images.append(seg_image)
-
-    return seg_images
-
-
-def segment_plant_slic(images, data_type='train', sharpen=True):
-    seg_images = images
-    if data_type == 'train':
-        seg_images = defaultdict(list)
-        for label, val in images.items():
-            for n in range(len(images[label])):
-                image_slic = seg.slic(images[label][n], n_segments=355)
-                image_rgb = color.label2rgb(image_slic, images[label][n], kind='avg')
-                image_rgb = image_rgb[:, :, ::-1]
-                mask = create_mask_for_plant_slic(image_rgb)
-                seg_image = cv2.bitwise_and(image_rgb, image_rgb, mask=mask)
-
-                if sharpen:
-                    seg_image = sharpen_image(seg_image)
-
-                seg_image[mask == 0] = 255
-                seg_image[mask != 0] = images[label][n][mask != 0]
-
-                # change background color to white
-                seg_images[label].append(seg_image)
-
-    elif data_type == 'test':
-        seg_images = []
-        for n in range(len(images)):
-            image_slic = seg.slic(images[n], n_segments=355)
-            image_rgb = color.label2rgb(image_slic, images[n], kind='avg')
-            image_rgb = image_rgb[:, :, ::-1]
-            mask = create_mask_for_plant_slic(image_rgb)
-            seg_image = cv2.bitwise_and(image_rgb, image_rgb, mask=mask)
-
-            if sharpen:
-                seg_image = sharpen_image(seg_image)
-
-            # change background color to white
-            seg_image[mask == 0] = 255
-            seg_image[mask != 0] = images[n][mask != 0]
-
-            seg_images.append(seg_image)
-
-    return seg_images
+    return masked_img
 
 
 def sharpen_image(image):
