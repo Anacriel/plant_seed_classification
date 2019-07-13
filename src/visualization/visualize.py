@@ -5,8 +5,8 @@ import cv2
 from glob import glob
 from mpl_toolkits.axes_grid1 import ImageGrid
 from collections import defaultdict
-import skimage.segmentation as seg
-import skimage.color as color
+from skimage import morphology
+
 
 plt.rcParams['font.size'] = 8
 
@@ -57,30 +57,46 @@ def plot_raw_grid(images, labels, cols=12):
             if col_i == 0:
                 ax.text(-1000, 112, labels[n], verticalalignment='center')
             img = images[n]
+            img = segment_plant(img)
+            img = img[:, :, ::-1]
             ax.imshow(img)
             ax.axis('off')
             str_i = str_i + 1
             n = n + 1
 
 
-def create_mask_for_plant(image):
-    blur = cv2.GaussianBlur(image, (3, 3), 2)
+def plot_in_line(images, labels, cols=3):
+    fig, axs = plt.subplots(1, 3, figsize=(9, 3))
 
-    hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-    lower_green = np.array([22, 60, 0])  # second 75
+    for col_i in range(cols):
+        img = images[col_i][:, :, ::-1]
+        axs[col_i].imshow(img)
+        axs[col_i].axis('off')
+
+
+def create_mask_for_plant(image):
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lower_green = np.array([24, 60, 0])  # second 75 or 60
     upper_green = np.array([150, 255, 255])
 
     mask = cv2.inRange(hsv, lower_green, upper_green)
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (6, 6))
     closed_mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
-    return closed_mask
+    imglab = morphology.label(closed_mask)  # create labels in segmented image
+    cleaned = morphology.remove_small_objects(imglab, min_size=64, connectivity=1)
+    img3 = np.zeros(cleaned.shape)  # create array of size cleaned
+    img3[cleaned > 0] = 255
+    img3 = np.uint8(img3)
+
+    return img3
 
 
 def segment_plant(image):
     mask = create_mask_for_plant(image)
     masked_img = cv2.bitwise_and(image, image, mask=mask)
-    masked_img[mask == 0] = 255
+    masked_img[mask == 0] = 0
 
     return masked_img
 
