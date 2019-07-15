@@ -46,7 +46,7 @@ def create_dataset_added_features(images, labels, kind):
         masked_img = cv2.bitwise_and(images[i], images[i], mask=mask)
         masked_img[mask == 0] = 255
 
-       #kernel = np.ones((2, 2), np.uint8)
+        #kernel = np.ones((2, 2), np.uint8)
         #dilation = cv2.dilate(masked_img, kernel, iterations=1)
 
         img = cv2.cvtColor(masked_img, cv2.COLOR_BGR2RGB)

@@ -1,0 +1,20 @@
+\newcommand{\threeimage}[6]{
+\begin{figure}[h!]  
+    \centering 
+    \subfigure[]{
+        \includegraphics[width=0.3\linewidth, height=0.3\linewidth]{#1} 
+        \label{fig_f_ #1} }  
+        %\hspace{4ex}
+    \subfigure[]{
+    \includegraphics[width=0.3\linewidth, height=0.3\linewidth]{#2} 
+    \label{fig_f_ #2} }
+   % \hspace{4ex}
+    \subfigure[]{ 
+        \includegraphics[width=0.3\linewidth, height=0.3\linewidth]{#3} 
+        \label{fig_f_ #3} }  
+    \caption{ 
+    \subref{fig_f_ #1} #4; 
+    \subref{fig_f_ #2} #5; 
+    \subref{fig_f_ #3} #6} 
+    \label{fig:f_ #1#2#3}
+\end{figure}}
