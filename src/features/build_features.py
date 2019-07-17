@@ -1,9 +1,4 @@
 import cv2
-import numpy as np
-
-
-def find_contours(mask_image):
-    return cv2.findContours(mask_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
 
 
 def count_contours(contours, min_contour_area=150):

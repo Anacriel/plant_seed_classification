@@ -142,9 +142,9 @@ def create_mask_for_plant(image):
 def segment_plant(image):
     mask = create_mask_for_plant(image)
     masked_img = cv2.bitwise_and(image, image, mask=mask)
-    masked_img[mask == 0] = 0
+    masked_img[mask == 0] = 255
 
-    return masked_img
+    return masked_img, mask
 
 
 def sharpen_image(image):

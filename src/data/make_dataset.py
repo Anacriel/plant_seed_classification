@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import pandas as pd
 import mahotas as mt
+import scipy.stats as st
 import src.visualization.visualize as vs
 import src.features.build_features as bf
 from glob import glob
@@ -31,28 +32,18 @@ def get_images(input_path, height=200, width=200, per_class=0):
 
 
 def create_dataset_added_features(images, labels, kind):
-    features_names = [kind, 'area', 'largest_area', 'number_of_elems', 'perimeter', 'physiological_length',
-                      'physiological_width', 'aspect_ratio', 'rectangularity', 'circularity',
-                      'mean_r', 'mean_g', 'mean_b', 'stddev_r', 'stddev_g', 'stddev_b',
-                      'contrast', 'correlation', 'entropy'
+    features_names = [kind, 'area', 'largest_area', 'number_of_elems', 'perimeter',
+                      'aspect_ratio', 'circularity', 'mean_r', 'mean_g', 'mean_b',
+                      'med_r', 'med_g', 'med_b', 'stddev_r', 'stddev_g', 'stddev_b',
+                      'skew_r', 'skew_g', 'skew_b',
                       ]
     df = pd.DataFrame([], columns=features_names)
     for i in range(len(images)):
-        # Reduce noise
-        #images[i] = cv2.fastNlMeansDenoisingColored(images[i], None, 5, 5, 5, 5)
-
         # Delete background
-        mask = vs.create_mask_for_plant(images[i])
-        masked_img = cv2.bitwise_and(images[i], images[i], mask=mask)
-        masked_img[mask == 0] = 255
-
-        #kernel = np.ones((2, 2), np.uint8)
-        #dilation = cv2.dilate(masked_img, kernel, iterations=1)
-
+        masked_img, mask = vs.segment_plant(images[i])
         img = cv2.cvtColor(masked_img, cv2.COLOR_BGR2RGB)
-        gs = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
-        contours = bf.find_contours(mask)
+        contours = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
         if not contours:
             continue
 
@@ -65,7 +56,7 @@ def create_dataset_added_features(images, labels, kind):
 
         x, y, w, h = cv2.boundingRect(cnt)
         aspect_ratio = 0.0 if h == 0.0 else float(w) / h
-        rectangularity = 0.0 if area == 0.0 else w * h / area
+        #rectangularity = 0.0 if area == 0.0 else w * h / area
         circularity = 0.0 if area == 0.0 else (perimeter ** 2) / area
 
         # Color features
@@ -73,29 +64,34 @@ def create_dataset_added_features(images, labels, kind):
         green_channel = img[:, :, 1]
         blue_channel = img[:, :, 2]
 
-        blue_channel[blue_channel == 255] = 0
-        green_channel[green_channel == 255] = 0
-        red_channel[red_channel == 255] = 0
+        blue_channel_plant = blue_channel[blue_channel != 255]
+        green_channel_plant = green_channel[green_channel != 255]
+        red_channel_plant = red_channel[red_channel != 255]
 
-        red_mean = np.mean(red_channel)
-        green_mean = np.mean(green_channel)
-        blue_mean = np.mean(blue_channel)
+        red_mean = np.mean(red_channel_plant)
+        green_mean = np.mean(green_channel_plant)
+        blue_mean = np.mean(blue_channel_plant)
 
-        red_std = np.std(red_channel)
-        green_std = np.std(green_channel)
-        blue_std = np.std(blue_channel)
+        red_med = np.median(red_channel_plant)
+        green_med = np.median(green_channel_plant)
+        blue_med = np.median(blue_channel_plant)
 
-        # Texture features
-        textures = mt.features.haralick(gs)
-        ht_mean = textures.mean(axis=0)
-        contrast = ht_mean[1]
-        correlation = ht_mean[2]
-        entropy = ht_mean[8]
+        red_std = np.std(red_channel_plant)
+        green_std = np.std(green_channel_plant)
+        blue_std = np.std(blue_channel_plant)
 
-        vector = [labels[i], area, largest_area, nb_of_contours, perimeter, w, h,
-                  aspect_ratio, rectangularity, circularity,
-                  red_mean, green_mean, blue_mean, red_std, green_std, blue_std,
-                  contrast, correlation, entropy]
+        tmp_r = np.reshape(red_channel, (-1))
+        tmp_g = np.reshape(green_channel, (-1))
+        tmp_b = np.reshape(blue_channel, (-1))
+
+        skew_r = st.skew(tmp_r[tmp_r != 255])
+        skew_g = st.skew(tmp_g[tmp_g != 255])
+        skew_b = st.skew(tmp_b[tmp_b != 255])
+
+        vector = [labels[i], area, largest_area, nb_of_contours, perimeter,
+                  aspect_ratio,  circularity,
+                  red_mean, green_mean, blue_mean, red_med, green_med, blue_med, red_std, green_std, blue_std,
+                  skew_r, skew_g, skew_b]
 
         df_temp = pd.DataFrame([vector], columns=features_names)
         df = df.append(df_temp)
