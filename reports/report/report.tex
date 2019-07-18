@@ -140,7 +140,7 @@
 
 \begin{equation}
 	\label{eq_2}
-	 s^{(k)} = \sqrt{\frac{1}{N}\sum_{i=1}^{N}(x^{(k)}_i - \overline{x^{(k)}})} \text{ –– выборочное стандартное отклонение}
+	 s^{(k)} = \sqrt{\frac{1}{N}\sum_{i=1}^{N}(x^{(k)}_i - \overline{x^{(k)}})^2} \text{ –– выборочное стандартное отклонение}
 \end{equation}
 
 \indent{Разделим изображение поканально, как на рисунке \ref{fig_8}, и рассчитаем \eqref{eq_1}, \eqref{eq_2}}
@@ -193,13 +193,56 @@
 \end{equation}
 где $P$ –– периметр контура, ограничивающего объект, $A$ –– площадь объекта
 
+\section{Классификация}
 
+\subsection{Метод опорных векторов}
 
+\indent{\indent Метод опорных векторов (\textit{англ. Support vector machine, SVM}) –– алгоритм бинарной классификации, основанный на построении разделяющей гиперплоскости с зазором. Алгоритм метода описан в библиотеке Scikit-learn \cite{bib_7} для языка программирования Python.}
 
+\indent{ Пусть $\{(x_i, y_i)\}_{i=1}^l$ –– обучающая выборка, где $x_i \in \mathbb{R}^n$ –– признак объекта, $y \in \{-1, 1\}^l$ –– вектор меток принадлежности классу.  Так как в общем случае гарантировать линейную разделимость выборки невозможно, сформулируем задачу минимизации с дополнительным параметром (\textit{мягким зазором}):}
 
-\section{Классификатор}
+\begin{equation}
+	\min_{w, b, \xi} \;\; \frac{1}{2}w^T w + C\sum_{i=1}^{l} \xi_i 
+	\label{eq_5}
+\end{equation}
+при условиях 
+\begin{equation}
+	y_i(w^T \phi(x_i) + b) \ge 1 - \xi_i, \\
+	\xi_i \ge 0,
+	\label{eq_6}
+\end{equation}
+где $\phi(x_i)$ –– отображение пространства признаков в пространство большей размерности, $\xi_i$ –– поправка, ослабляющая границы классов. Коэффициент $C > 0$ определяет, насколько велик зазор разделяющей гиперплоскости.
+
+\indent{ Определим непрерывную функцию ядра как  $K(x_i, x_j) = \phi(x_i)^T \phi(x_j)$, представляющую собой пары скалярных произведений. В данной работе выберем гауссово ядро с радиальной базовой функцией (\textit{англ.} Radial basis function, RBF):}
+
+\begin{equation}
+	K(x_i, x_j) = \exp(\gamma ||x_i - x_j||^2),
+	\label{eq_7}
+\end{equation}
+где $\gamma$ –– параметр ядра
+
+\indent{ Ядро RBF обладает преимуществами перед другими ядрами:}
+\begin{itemize}
+	\item Позволяет решить задачу \eqref{eq_5} с условиями \eqref{eq_6} в случае, когда выборка не разделима линейно
+	\item Единственный параметр –– $\gamma$, контролирует степень влияния признаков на границу решения
+	\item Значения ядра $K(x_i, x_j)$ лежат в пределах $(0, 1]$, не обращаются в 0 и не уходят в бесконечность
+\end{itemize}
+
+\subsection{Выбор гиперпараметров}
+
+\indent{\indent Гиперпараметры –– это параметры, которые определяются однажды и не меняются в ходе обучения классификатора. В данной задаче такими параметрами являются $C$ и $\gamma$. Подбор гиперпараметров осуществен с помощью кросс-валидации и поиска по сетке, описанных в статье \cite{bib_8}.}
+
+\subsection{Нормализация данных}
+
+\indent{\indent Алгоритм SVM чувствителен к неотмасштабированным данным, особенно в случае использования ядра RBF, представляющего собой Евклидово расстояние \eqref{eq_7}. В случае, когда значения свойств находятся в разных интервалах, незначительное отличие в большем может вывести за пределы значений второго свойства. Переведем все значения в отрезок $[0, 1]$:}
+
+\begin{equation}
+	z_{i_j} = \frac{x_{i_j} - \min_{i = 1, \dots, l}(x_{i_j})}{\max_{i = 1, \dots, l}(x_{i_j}) - \min_{i = 1, \dots, l}(x_{i_j})}
+	\label{eq_8}
+\end{equation}
 
 \section{Результаты исследований}
+$(0.87)$
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=16.cm, height=12.cm]{segmented_part_1}
@@ -213,8 +256,10 @@
 	\bibitem{bib_2} Bradski, G. (2000). The OpenCV Library. Dr. Dobb's Journal of Software Tools.
 	\bibitem{bib_3} Oliphant, T. E. (2006). A guide to NumPy (Vol. 1). Trelgol Publishing USA.
 	\bibitem{bib_4} Panja, D., Poppe, R. (2018). INFOIBV. Image Processing course, Universiteit Utrecht.
-	\bibitem{bib_5} L. Wojnar \& K.J. Kurzydłowski, et al. (2000). Practical Guide to Image Analysis, ASM International.
+	\bibitem{bib_5} Wojnar, L., Kurzydłowski, K. J. et al. (2000). Practical Guide to Image Analysis, ASM International.
 	\bibitem{bib_6} Suzuki, S. and Abe, K. (1985). Topological Structural Analysis of Digitized Binary Images by Border Following.
+	\bibitem{bib_7} Pedregosa et al. (2011). Scikit-learn: Machine Learning in Python
+	\bibitem{bib_8} Chih-Wei Hsu, Chih-Chung Chang, Chih-Jen Lin (2003). A Practical Guide to Support Vector Classification.
 \end{thebibliography}
 
 \end{document}{}
