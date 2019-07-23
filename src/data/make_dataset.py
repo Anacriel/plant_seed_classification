@@ -3,7 +3,6 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
-import mahotas as mt
 import scipy.stats as st
 import src.visualization.visualize as vs
 import src.features.build_features as bf
@@ -34,14 +33,14 @@ def get_images(input_path, height=200, width=200, per_class=0):
 def create_dataset_added_features(images, labels, kind):
     features_names = [kind, 'area', 'largest_area', 'number_of_elems', 'perimeter',
                       'aspect_ratio', 'circularity', 'mean_r', 'mean_g', 'mean_b',
-                      'med_r', 'med_g', 'med_b', 'stddev_r', 'stddev_g', 'stddev_b',
-                      'skew_r', 'skew_g', 'skew_b',
-                      ]
+                      'stddev_r', 'stddev_g', 'stddev_b',
+                      'skew_r', 'skew_g', 'skew_b']
     df = pd.DataFrame([], columns=features_names)
     for i in range(len(images)):
         # Delete background
         masked_img, mask = vs.segment_plant(images[i])
         img = cv2.cvtColor(masked_img, cv2.COLOR_BGR2RGB)
+        gs = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
         contours = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
         if not contours:
@@ -72,9 +71,9 @@ def create_dataset_added_features(images, labels, kind):
         green_mean = np.mean(green_channel_plant)
         blue_mean = np.mean(blue_channel_plant)
 
-        red_med = np.median(red_channel_plant)
-        green_med = np.median(green_channel_plant)
-        blue_med = np.median(blue_channel_plant)
+        #red_med = np.median(red_channel_plant)
+        #green_med = np.median(green_channel_plant)
+        #blue_med = np.median(blue_channel_plant)
 
         red_std = np.std(red_channel_plant)
         green_std = np.std(green_channel_plant)
@@ -90,7 +89,7 @@ def create_dataset_added_features(images, labels, kind):
 
         vector = [labels[i], area, largest_area, nb_of_contours, perimeter,
                   aspect_ratio,  circularity,
-                  red_mean, green_mean, blue_mean, red_med, green_med, blue_med, red_std, green_std, blue_std,
+                  red_mean, green_mean, blue_mean, red_std, green_std, blue_std,
                   skew_r, skew_g, skew_b]
 
         df_temp = pd.DataFrame([vector], columns=features_names)

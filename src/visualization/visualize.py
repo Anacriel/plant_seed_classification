@@ -103,7 +103,7 @@ def plot_raw_grid(images, labels, cols=12):
             if col_i == 0:
                 ax.text(-1000, 112, labels[n], verticalalignment='center')
             img = images[n]
-            img = segment_plant(img)
+            img, mask = segment_plant(img)
             img = img[:, :, ::-1]
             ax.imshow(img)
             ax.axis('off')
@@ -130,7 +130,7 @@ def create_mask_for_plant(image):
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
     closed_mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
-    imglab = morphology.label(closed_mask)  # create labels in segmented image
+    imglab = morphology.label(mask)  # create labels in segmented image
     cleaned = morphology.remove_small_objects(imglab, min_size=64, connectivity=1)
     img3 = np.zeros(cleaned.shape)  # create array of size cleaned
     img3[cleaned > 0] = 255
