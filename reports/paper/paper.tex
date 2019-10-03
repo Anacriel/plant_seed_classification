@@ -8,9 +8,12 @@
 % Used for displaying a sample figure. If possible, figure files should
 % be included in EPS format.
 %
+\usepackage{color}
+\usepackage{hyperref}
 % If you use the hyperref package, please uncomment the following line
 % to display URLs in blue roman font according to Springer's eBook style:
-% \renewcommand\UrlFont{\color{blue}\rmfamily}
+\graphicspath{{img/}}
+\renewcommand\UrlFont{\color{blue}\rmfamily}
 
 \begin{document}
 %
@@ -18,12 +21,12 @@
 % If the paper title is too long for the running head, you can set
 % an abbreviated paper title here
 %
-\author{Dmitri Jakovlev \and Julia ... \and Georgy Shevlyakov}
+\author{Dmitri Jakovlev \and Julia Kamaletdinova \and Georgy Shevlyakov}
 % \author{First Author\inst{1}\orcidID{0000-1111-2222-3333} \and
 % Second Author\inst{2,3}\orcidID{1111-2222-3333-4444} \and
 % Third Author\inst{3}\orcidID{2222--3333-4444-5555}}
 %
-\authorrunning{F. Author et al.}
+\authorrunning{D. Jakovlev, J. Kamaletdinova et al.}
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
 %
@@ -64,17 +67,8 @@ The abstract should briefly summarize the contents of the paper in
 % BibTeX users should specify bibliography style 'splncs04'.
 % References will then be sorted and formatted in the correct style.
 %
-% \bibliographystyle{splncs04}
-% \bibliography{mybibliography}
-%
-\begin{thebibliography}{}
-	\bibitem{bib_1} Giselsson, T., Jørgensen, R., Jensen, P., Dyrmann, M., and Midtiby, H. (2017). A Public Image Database for Benchmark of Plant Seedling Classification Algorithms.
-	\bibitem{bib_2} Bradski, G. (2000). The OpenCV Library. Dr. Dobb's Journal of Software Tools.
-	\bibitem{bib_3} Oliphant, T. E. (2006). A guide to NumPy (Vol. 1). Trelgol Publishing USA.
-	\bibitem{bib_4} Panja, D., Poppe, R. (2018). INFOIBV. Image Processing course, Universiteit Utrecht.
-	\bibitem{bib_5} Wojnar, L., Kurzydłowski, K. J. et al. (2000). Practical Guide to Image Analysis, ASM International.
-	\bibitem{bib_6} Suzuki, S. and Abe, K. (1985). Topological Structural Analysis of Digitized Binary Images by Border Following.
-	\bibitem{bib_7} Pedregosa et al. (2011). Scikit-learn: Machine Learning in Python
-	\bibitem{bib_8} Chih-Wei Hsu, Chih-Chung Chang, Chih-Jen Lin (2003). A Practical Guide to Support Vector Classification.
-\end{thebibliography}
+\bibliographystyle{splncs04}
+\bibliography{mybibliography}
+
+
 \end{document}
