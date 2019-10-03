@@ -73,7 +73,7 @@ def create_dataset(images, labels, kind):
     df = pd.DataFrame([], columns=features_names)
     for i in range(len(images)):
         # Delete background
-        masked_img, mask = vs.segment_plant(images[i], get_mask=True)
+        masked_img, mask = vs.segment_plant(images[i])
         img = cv2.cvtColor(masked_img, cv2.COLOR_BGR2RGB)
         gs = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 

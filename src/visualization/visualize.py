@@ -117,7 +117,7 @@ def segment_labeled_plants(images, sharpen=False):
     for label, val in images.items():
         seg_images[label] = []
         for n in range(len(images[label])):
-            seg_image = segment_plant(images[label][n])
+            seg_image, mask = segment_plant(images[label][n])
             if sharpen:
                 seg_image = sharpen_image(seg_image)
 
@@ -126,12 +126,12 @@ def segment_labeled_plants(images, sharpen=False):
     return seg_images
 
 
-def segment_plant(image, get_mask=False):
+def segment_plant(image):
     mask = create_mask_for_plant(image)
     masked_img = cv2.bitwise_and(image, image, mask=mask)
     masked_img[mask == 0] = 255
 
-    return masked_img, mask if get_mask else masked_img
+    return masked_img, mask
 
 
 def sharpen_image(image):
