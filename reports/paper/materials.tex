@@ -13,9 +13,15 @@
 \end{figure}
 
 \subsection{Data preprocessing}
-\indent{\indent Firstly, we reduce resolution of all images to the same resolution 200x200px using bilinear interpolation. The main idea of bilinear interpolation that the new image pixel is the weighted sum of neighboring pixels of the original image. It helps to decrease computational complexity and build features.}
+\indent{We have three steps for data preprocessing.}
 
-\indent{}
+\indent{Firstly, we reduce resolution of all images to the same resolution 200x200px using bilinear interpolation. The main idea of bilinear interpolation that the new image pixel is the weighted sum of neighboring pixels of the original image. It helps to decrease computational complexity and build features.}
+
+\indent{Secondly, note that the objects of our study are plants and they are painted green. Therefore, we can create a mask that filters the range of green channel and ignores the other pixels. Consider the HSV (Hue Saturation Value) color model. In the BGR format, the value of each component depends on the amount of light entering the object. HSV allows you to distinguish between information about color and brightness. Hue, saturation and intensity allow you to set the lower and upper borders of the shades of a certain color, in this case –– green. Note the pixels in the green range and get a color mask (Fig. \ref{fig_f_ seg_step_2}). Now we apply the operation of logical multiplication to the original image, assign the value of the background pixels to a black value and get a segmented plant.}
+
+\threeimage{seg_step_1}{seg_step_2}{seg_step_3}{Source image}{Mask}{Segmented image}
+
+\indent{Thirdly, }
 
 \subsection{Feature selection?}
 
