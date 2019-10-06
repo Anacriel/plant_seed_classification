@@ -27,58 +27,52 @@
 \indent{Segmentation does not always work well (Fig. \ref{fig_f_ seg_step_3}). Small areas of the background may fall into the range of green values, which causes distortion of the binary mask (Fig. \ref{fig:seg_no_morph_1})}.
 
 \begin{figure}[h]
-    \centering
-    \includegraphics[height=5.5cm, width=10cm]{seg_no_morph_1}
-    \caption{Segmentation distortion}
-    \label{fig:seg_no_morph_1}
+	\centering
+    \subfigure[Before morphological closure]{
+		{\includegraphics[width=5cm, height=5cm]{seg_no_morph_1}
+		\label{fig:seg_no_morph_1}}
+	}
+    \qquad
+    \subfigure[After morphological closure]{
+		{\includegraphics[width=5cm, height=5cm]{seg_morph_1}
+		\label{seg_morph_1}}
+	}
+    \caption{Segmentation improvement example}%
+    \label{fig:seg_improve}
 \end{figure}
 
-\indent{Such drawbacks can be eliminated with the morphological operations –– nonlinear transformations associated with the shape and structure of image. The morphology is used to study the interaction of an image with a specific structural element –– the kernel. The kernel iterates over the entire image and compares with the neighborhood of the pixels, after which morphological operations are applied \cite{friel2000imanalysis}. To improve segmentation, we use the operation of morphological closure –– a combination of dilatation (Fig. \ref{fig:dilation}) and erosion (Fig. \ref{fig:erosion}) operations.}
+\indent{Such drawbacks can be eliminated with the morphological operations –– nonlinear transformations associated with the shape and structure of image. The morphology is used to study the interaction of an image with a specific structural element –– the kernel. The kernel iterates over the entire image and compares with the neighborhood of the pixels, after which morphological operations are applied \cite{friel2000imanalysis}.}
 
-\indent{Apply the close operation to image (Fig. \ref{fig:seg_no_morph_1}) by selecting an elliptical core of 6x6px size and delete the remaining objects with an area of less than 160px. The plant in image (Fig. \ref{fig:seg_morph_1}) has no cavities, and the background is cleared of non-plant elements. But morphological closure does not always have a clear effect on images. Consider the result of working on an image of the class Loose silky-bent. It is noticeable (Fig. \ref{fig_7_1}) that the cavities corresponding to the background were restored, which does not correspond to the desired result. We restrict ourselves to the removal of objects whose contours limit a small area.
-}
+\indent{To improve segmentation, we use the operation of morphological closure –– a combination of dilatation (Fig. \ref{fig:dilation}) and erosion (Fig. \ref{fig:erosion}) operations.}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[height=5.5cm, width=10cm]{seg_morph_1}
-    \caption{Image after closing mask}
-    \label{fig:seg_morph_1}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[height=5.5cm, width=10cm]{dilation}
+    \includegraphics[height=5cm, width=10cm]{dilation}
     \caption{3x3 square core dilation}
     \label{fig:dilation}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[height=5.5cm, width=10cm]{erosion}
+    \includegraphics[height=5cm, width=10cm]{erosion}
     \caption{3x3 square core erosion}
     \label{fig:erosion}
 \end{figure}
 
+\indent{Apply the close operation to image (Fig. \ref{fig:seg_no_closure_good_1}) by selecting an elliptical core of 6x6px size and delete the remaining objects with an area of less than 160px. The plant in image (Fig. \ref{fig:seg_with_closure_bad_1}) has no cavities, and the background is cleared of non-plant elements. But morphological closure does not always have a clear effect on images. Consider the result of working on an image of the class Loose silky-bent. It is noticeable (Fig. \ref{fig:seg_degradation}) that the cavities corresponding to the background were restored, which does not correspond to the desired result. We restrict ourselves to the removal of objects whose contours limit a small area.
+}
+
 \begin{figure}[h]
 	\centering
     \subfigure[Before morphological closure]{
-		{\includegraphics[width=6cm, height=6cm]{seg_no_closure_good_1}
-		\label{fig_7_1_a}}
+		{\includegraphics[width=5cm, height=5cm]{seg_no_closure_good_1}
+		\label{fig:seg_no_closure_good_1}}
 	}
     \qquad
     \subfigure[After morphological closure]{
-		{\includegraphics[width=6cm, height=6cm]{seg_with_closure_bad_1}
-		\label{fig_7_1_b}}
+		{\includegraphics[width=5cm, height=5cm]{seg_with_closure_bad_1}
+		\label{fig:seg_with_closure_bad_1}}
 	}
     \caption{Segmentation degradation example}%
-    \label{fig_7_1}
-\end{figure}
-
-
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[height=5.5cm, width=10cm]{seg_morph_1}
-    \caption{Image after closing mask}
-    \label{fig:seg_morph_1}
+    \label{fig:seg_degradation}
 \end{figure}

@@ -34,17 +34,25 @@
 
 \begin{equation}
 	\label{eq:1}
-	\overline{x^{(k)}} = \frac{1}{N}\sum_{i=1}^{N}x^{(k)}_i
+	\overline{x^{(k)}} = \frac{1}{N}\sum_{i=1}^{N}x^{(k)}_i 
 \end{equation}
 
 \begin{equation}
 	\label{eq:2}
-	 s^{(k)} = \sqrt{\frac{1}{N}\sum_{i=1}^{N}(x^{(k)}_i - \overline{x^{(k)}})^2}
+	 s^{(k)} = \sqrt{\frac{1}{N}\sum_{i=1}^{N}(x^{(k)}_i - \overline{x^{(k)}})^2} 
 \end{equation}
 
 \subsection{Shape features}
 
-\indent{\indent \textbf{Total perimeter}}
+\indent{\indent \textbf{Number of bounding contours}}
+
+\indent{Segmentation output may result in image divided in separate parts of the plant. We decided to use it and compute the number of bounding contours. We will use the boundary tracing algorithm for the boundary extraction. The designated algorithm \cite{cv1985contours} was implemented in OpenCV \cite{opencv2000python} library for the Python programming language. The studies did not take into account contours bounding areas below a certain threshold, which was empirically chosen.}
+
+\indent{ Let $K$ be the number of detected bounding contours above the threshold in the further contour-related characteristics.}
+
+\vspace{1cm}
+
+\textbf{Total perimeter}
 
 \indent{In this feature we will count the sum of perimeters of all the areas bounded by contours:}
 
@@ -52,21 +60,70 @@
 	\label{eq:3}
 	 P = \sum_{i=1}^{K}p_i,
 \end{equation}
-where $p_i$ –– $i$-th perimeter, $K$ –– number detected bounding contours
+where $p_i$ –– $i$-th perimeter
+
+\vspace{1cm}
 
 \textbf{Total area}
 
 \indent{It includes all the areas bounded by contours:}
 
+\begin{equation}
+	\label{eq:4}
+	 S = \sum_{i=1}^{K}s_i,
+\end{equation}
+where $s_i$ –– $i$-th area
+
+\vspace{1cm}
+
 \textbf{Maximal contour area}
 
-\textbf{Number of bounding contours}
+\indent{We will be analysing the contours bounded maximal areas:}
 
-\indent{Segmentation output may result in image divided in separate parts of the plant. We decided to use it and compute the number of bounding contours. We will use the boundary tracing algorithm for the boundary extraction. The designated algorithm \cite{cv1985contours} was implemented in OpenCV \cite{opencv2000python} library for the Python programming language.}
+\begin{equation}
+	\label{eq:5}
+	 S_m = \max{s_i}, \; i = 1, \dots, K,
+\end{equation}
+where $s_i$ –– $i$-th area
+
+\vspace{1cm}
 
 \textbf{Rectangularity}
 
+\indent{One of the methods to estimate rectangularity is to plot minimum bounding rectangle...}
+
+\vspace{1cm}
+
 \textbf{Circularity}
 
+\indent{Another title of this shape factor is the isoperimetric quotient and it shows how much area pe perimeter is bounding:}
+
+\begin{equation}
+	f_{circ} = \frac{4 \pi A}{P^2},
+	\label{eq:6}
+\end{equation}
+where $P$ –– total perimeter, $A$ –– total area of all detected elements of a plant
+
+\indent{ Consider the correlation matrix of the described features:}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12.cm, height=11.5cm]{corr_heatmap_1}
+	\caption{Feature correlation matrix}
+	\label{fig_corr_matrix}
+\end{figure}
+
+\indent{ Based on the data in the figure \ref{fig_corr_matrix}, we conclude that the most linearly dependent features are the total area and the largest area, but this is not true for all classes due to the predominance of plants, limited by the onlyone contour, so the consideration of the maximum area feature is not excluded.}
 
 \subsection{Classification}
+\indent{\indent The main method for this task is Support Vector Machine (SVM) –– a binary classification algorithm based on building a separating hyperplane. The algorithm is implemented in Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
+
+\indent{We will use the Radial Basis Function (RBF) as the kernel function for SVM. The choice was made based on the following advantages:}
+
+\begin{itemize}
+	\item RBF usage allows to build a hyperplane when the data is not linearly separable
+	\item Only one parameter that affects the resulting solution needs to be tuned
+	\item Values of the RBF function are in $(0, 1]$, which does not include zero or infinity
+\end{itemize}
+
+\indent{ The SVM algorithm is sensitive to non-normalized data, especially when using the RBF kernel, which is the Euclidian distance itself. In the case when the feature values are in different intervals, a slight difference in one of them can lead to going out of range in second feature values. The solution is to map all the values into one segment, in this task we will choose  $[0, 1]$.}
