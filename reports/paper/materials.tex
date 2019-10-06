@@ -4,15 +4,15 @@
 
 \subsection{Feature selection?}
 
-\indent{\indent Features of the images define their content. We recognise the information images provide us with taking into account a great number of features. Then we answer what do we see exactly. The same process can be projected on image classification task: image features let the classifier propose the output decision. Another advantage of the approach is that it reduces feature space for a machine learning algorithm. We often need only a part of the information image is carrying, hence we don't need to process and interpret all the pixels, what can lead to extra computational expences.}
+\indent{\indent Features of the images define their content. We recognize the information images provide us in consideration of a great number of features. Then we answer, what do we see exactly. The same process can be projected on the image classification task: image features let the classifier propose the output decision. Another advantage of the approach is that it reduces feature space for a machine learning algorithm. We often need only a piece of the information image provides, hence we do not need to process and evaluate all the pixels, which can cause additional computational expenses.}
 
-\indent{ Selecting features is a complicated and convoluted research area itself, the assertion if supported by the variety of feature types and the need of presenting essential properties on the equal basis with the previous assertion.}
+\indent{ Selecting features is a complicated and convoluted research area itself, the statement is supported by the variety of feature types, and the need of presenting essential properties on an equal basis with the previous assertion.}
 
-\indent{ As dicucussed before, we need to define the set of features describing the dataset in the best way. Supposed features must meet the following criterion:}
+\indent{ As discussed before, we need to define the set of features describing the dataset in the best way. Supposed features must satisfy the following criterion:}
 
 \begin{itemize}
     \item The feature space should be low-dimensional
-    \item The features should not be correlated or be correlated as less as possible
+    \item The features should correlate or correlate as little as possible
     \item Selected features should represent the content of an image as fully as possible
 \end{itemize}
 
@@ -20,7 +20,7 @@
 
 \subsection{Color features}
 
-\indent{\indent Overviewing the dataset we can notice that all the plant species are mostly green. Additionally, images were recorded under specific conditions. We will use RGB color model, which stands for red, green and blue colors, and calculate features described below.}
+\indent{\indent Overviewing the dataset, we can notice that all the plant species are mostly green. Additionally, images were recorded under specific conditions. We will use RGB color model, which stands for red, green, and blue colors, and calculate features described below.}
 
 \begin{figure}[h]
     \centering
@@ -46,7 +46,7 @@
 
 \indent{\indent \textbf{Number of bounding contours}}
 
-\indent{Segmentation output may result in image divided in separate parts of the plant. We decided to use it and compute the number of bounding contours. We will use the boundary tracing algorithm for the boundary extraction. The designated algorithm \cite{cv1985contours} was implemented in OpenCV \cite{opencv2000python} library for the Python programming language. The studies did not take into account contours bounding areas below a certain threshold, which was empirically chosen.}
+\indent{Segmentation output may result in an image divided into separate parts of the plant. We decided to use it and compute the number of bounding contours. We will use the boundary tracing algorithm for the boundary extraction. The designated algorithm \cite{cv1985contours} was implemented in the OpenCV \cite{opencv2000python} library for the Python programming language. The studies did not take into account contours bounding areas below a certain threshold, which was empirically chosen.}
 
 \indent{ Let $K$ be the number of detected bounding contours above the threshold in the further contour-related characteristics.}
 
@@ -54,7 +54,7 @@
 
 \textbf{Total perimeter}
 
-\indent{In this feature we will count the sum of perimeters of all the areas bounded by contours:}
+\indent{In this feature, we will count the sum of perimeters of all the areas bounded by contours:}
 
 \begin{equation}
 	\label{eq:3}
@@ -64,7 +64,7 @@ where $p_i$ –– $i$-th perimeter
 
 \vspace{1cm}
 
-\textbf{Total area}
+\textbf{Entire area}
 
 \indent{It includes all the areas bounded by contours:}
 
@@ -78,7 +78,7 @@ where $s_i$ –– $i$-th area
 
 \textbf{Maximal contour area}
 
-\indent{We will be analysing the contours bounded maximal areas:}
+\indent{We will be analyzing the contours bounding maximal areas:}
 
 \begin{equation}
 	\label{eq:5}
@@ -90,19 +90,25 @@ where $s_i$ –– $i$-th area
 
 \textbf{Rectangularity}
 
-\indent{One of the methods to estimate rectangularity is to plot minimum bounding rectangle...}
+\indent{One of the methods to estimate rectangularity is to plot minimum bounding rectangle. Rectangularity is the ratio of the entire obect area to the minimum bounding rectangle area. This featere represent how rectangular an object is:}
+
+\begin{equation}
+	f_{rect} = \frac{S}{S_{MBR}},
+	\label{eq:6}
+\end{equation}
+where $S$ –– entire area, $S_{MBR}$ –– minimum bounding rectangle area
 
 \vspace{1cm}
 
 \textbf{Circularity}
 
-\indent{Another title of this shape factor is the isoperimetric quotient and it shows how much area pe perimeter is bounding:}
+\indent{Another title of this shape factor is the isoperimetric quotient, and it shows how much area pe perimeter is bounding:}
 
 \begin{equation}
 	f_{circ} = \frac{4 \pi A}{P^2},
-	\label{eq:6}
+	\label{eq:7}
 \end{equation}
-where $P$ –– total perimeter, $A$ –– total area of all detected elements of a plant
+where $P$ –– entire perimeter, $A$ –– entire area of all detected elements of a plant
 
 \indent{ Consider the correlation matrix of the described features:}
 
@@ -113,17 +119,17 @@ where $P$ –– total perimeter, $A$ –– total area of all detected elements
 	\label{fig_corr_matrix}
 \end{figure}
 
-\indent{ Based on the data in the figure \ref{fig_corr_matrix}, we conclude that the most linearly dependent features are the total area and the largest area, but this is not true for all classes due to the predominance of plants, limited by the onlyone contour, so the consideration of the maximum area feature is not excluded.}
+\indent{ Based on the data in the figure \ref{fig_corr_matrix}, we conclude that the most linearly dependent features are the entire area and the largest area, but this is not true for all classes due to the predominance of plants, bounded by the only one contour, therefore the consideration of the maximum area feature is not rejected.}
 
 \subsection{Classification}
-\indent{\indent The main method for this task is Support Vector Machine (SVM) –– a binary classification algorithm based on building a separating hyperplane. The algorithm is implemented in Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
+\indent{\indent The main method for this task is Support Vector Machine (SVM) –– a binary classification algorithm based on building a separating hyperplane. The algorithm is implemented in the Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
 
 \indent{We will use the Radial Basis Function (RBF) as the kernel function for SVM. The choice was made based on the following advantages:}
 
 \begin{itemize}
-	\item RBF usage allows to build a hyperplane when the data is not linearly separable
+	\item RBF usage allows building a hyperplane when the data is not linearly separable
 	\item Only one parameter that affects the resulting solution needs to be tuned
-	\item Values of the RBF function are in $(0, 1]$, which does not include zero or infinity
+	\item The values of the RBF function are in $(0, 1]$, which does not include zero or infinity
 \end{itemize}
 
-\indent{ The SVM algorithm is sensitive to non-normalized data, especially when using the RBF kernel, which is the Euclidian distance itself. In the case when the feature values are in different intervals, a slight difference in one of them can lead to going out of range in second feature values. The solution is to map all the values into one segment, in this task we will choose  $[0, 1]$.}
+\indent{ The SVM algorithm is sensitive to non-normalized data, especially when using the RBF kernel, which is the Euclidian distance itself. In the case, when the feature values are at different intervals, a slight difference in one of them can lead to going out of range in second feature values. The solution is to map all the values into one segment. In this task, we will choose $[0, 1]$.}
