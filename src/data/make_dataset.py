@@ -88,8 +88,12 @@ def create_dataset(images, labels, kind):
         largest_area = bf.calculate_largest_contour_area(contours)
         perimeter = cv2.arcLength(cnt, True)
 
-        x, y, w, h = cv2.boundingRect(cnt)
-        aspect_ratio = 0.0 if h == 0.0 else float(w) / h
+        # x, y, w, h = cv2.boundingRect(cnt)
+        rect = cv2.minAreaRect(cnt)
+        width = rect[1][0]
+        height = rect[1][1]
+
+        aspect_ratio = 0.0 if height == 0.0 else width / height
         # rectangularity = 0.0 if area == 0.0 else w * h / area
         circularity = 0.0 if area == 0.0 else (perimeter ** 2) / area
 
@@ -105,10 +109,6 @@ def create_dataset(images, labels, kind):
         red_mean = np.mean(red_channel_plant)
         green_mean = np.mean(green_channel_plant)
         blue_mean = np.mean(blue_channel_plant)
-
-        # red_med = np.median(red_channel_plant)
-        # green_med = np.median(green_channel_plant)
-        # blue_med = np.median(blue_channel_plant)
 
         red_std = np.std(red_channel_plant)
         green_std = np.std(green_channel_plant)
