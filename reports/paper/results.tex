@@ -19,11 +19,32 @@ where $C$ –– set of the plants classes
 
 \indent{ The choice of such a metric is supported by the fact that classes are imbalanced. In this case, the influence of classes decreases due to averaging by classification characteristics, not by F-scores.}
 
-\indent{The classificator output is shown on \ref{fig:metrics}}
+\indent{The classificator result is shown in the table \ref{table:metrics}}. \\
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=7.cm, height=9.5cm]{metrics_1}
-	\caption{Metric by class ant total metric}
-	\label{fig:metrics}
-\end{figure}
+\begin{table}
+    \caption{Detailed metrics for SVM classificator}
+    \begin{center}
+        \begin{tabular}{lccc}
+            \toprule
+            \textbf{Type} & \textbf{Precision} & \textbf{Recall} & \textbf{F-score} \\
+            \midrule
+            Sugar beet       & 0.901 & 0.936 & 0.918 \\
+            Fat Hen          & 0.877 & 0.909 & 0.893 \\
+            Scentless Mayweed & 0.851 & 0.905 & 0.878 \\
+            Charlock         & 0.947 & 0.934 & 0.940  \\
+            Small-flowered Cranesbill & 0.963 & 0.991 & 0.977 \\
+            Maize            & 0.953 & 0.891 & 0.921   \\
+            Shepherds Purse  & 0.833 & 0.714 & 0.769 \\
+            Common Wheat     & 0.800 & 0.889 & 0.842 \\
+            Common Chickweed & 0.962 & 0.962 & 0.962 \\
+            Cleavers         & 0.885 & 0.852 & 0.868 \\
+            Loose Silky-bent & 0.828 & 0.888 & 0.857  \\
+            Black-grass      & 0.757 & 0.528 & 0.622 \\
+            \midrule
+            \multicolumn{3}{l}{Micro-averaged F-score} 0.885 \\
+            \bottomrule
+            \label{table:metrics}
+        \end{tabular}
+    \end{center}
+\end{table}
+

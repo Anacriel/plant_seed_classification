@@ -1,8 +1,8 @@
 %!TEX root = paper.tex
-\section{Plant Seedlings Classification}
+\section{Materials and methods}
 \input{data}
 
-\subsection{Feature selection?}
+\subsection{Feature selection}
 
 \indent{\indent Features of the images define their content. We recognize the information images provide us in consideration of a great number of features. Then we answer, what do we see exactly. The same process can be projected on the image classification task: image features let the classifier propose the output decision. Another advantage of the approach is that it reduces feature space for a machine learning algorithm. We often need only a piece of the information image provides, hence we do not need to process and evaluate all the pixels, which can cause additional computational expenses.}
 
@@ -29,7 +29,6 @@
     \label{fig:2}
 \end{figure}
 
-\vspace{3cm}
 \indent{Let $\{x^{(k)}\}_{i=1}^N$, where $k = 1, 2, 3 $ –– an index of a channel in RGB color space respectively, $N$ –– total number of the image pixels, $x^{(k)}_i$ –– $i$-th pixel of the $k$-th channel. We will compute sample mean and standard deviation for each channel:}
 
 \begin{equation}
@@ -44,17 +43,13 @@
 
 \subsection{Shape features}
 
-\indent{\indent \textbf{Number of bounding contours}}
-
-\indent{Segmentation output may result in an image divided into separate parts of the plant. We decided to use it and compute the number of bounding contours. We will use the boundary tracing algorithm for the boundary extraction. The designated algorithm \cite{cv1985contours} was implemented in the OpenCV \cite{opencv2000python} library for the Python programming language. The studies did not take into account contours bounding areas below a certain threshold, which was empirically chosen.}
+\indent{\indent The one widely-used approach to retrieve shape features is to detect and analyze bounding contours. We will use the boundary tracing algorithm for the boundary extraction. The designated algorithm \cite{cv1985contours} was implemented in the OpenCV \cite{opencv2000python} library for the Python programming language. The studies did not take into account contours bounding areas below a certain threshold, which was empirically chosen.
 
 \indent{ Let $K$ be the number of detected bounding contours above the threshold in the further contour-related characteristics.}
 
 \vspace{1cm}
 
-\textbf{Total perimeter}
-
-\indent{In this feature, we will count the sum of perimeters of all the areas bounded by contours:}
+\textbf{Total perimeter}. In this feature, we will count the sum of perimeters of all the areas bounded by contours:
 
 \begin{equation}
 	\label{eq:3}
@@ -64,9 +59,7 @@ where $p_i$ –– $i$-th perimeter
 
 \vspace{1cm}
 
-\textbf{Entire area}
-
-\indent{It includes all the areas bounded by contours:}
+\textbf{Entire area}. It includes all the areas bounded by contours:
 
 \begin{equation}
 	\label{eq:4}
@@ -76,9 +69,7 @@ where $s_i$ –– $i$-th area
 
 \vspace{1cm}
 
-\textbf{Maximal contour area}
-
-\indent{We will be analyzing the contours bounding maximal areas:}
+\textbf{Maximal contour area}. We will be analyzing the contours bounding maximal areas:
 
 \begin{equation}
 	\label{eq:5}
@@ -88,9 +79,7 @@ where $s_i$ –– $i$-th area
 
 \vspace{1cm}
 
-\textbf{Rectangularity}
-
-\indent{One of the methods to estimate rectangularity is to plot minimum bounding rectangle. Rectangularity is the ratio of the entire obect area to the minimum bounding rectangle area. This featere represent how rectangular an object is:}
+\textbf{Rectangularity}. One of the methods to estimate rectangularity is to plot minimum bounding rectangle. Rectangularity is the ratio of the entire obect area to the minimum bounding rectangle area. This featere represent how rectangular an object is:
 
 \begin{equation}
 	f_{rect} = \frac{S}{S_{MBR}},
@@ -100,9 +89,7 @@ where $S$ –– entire area, $S_{MBR}$ –– minimum bounding rectangle area
 
 \vspace{1cm}
 
-\textbf{Circularity}
-
-\indent{Another title of this shape factor is the isoperimetric quotient, and it shows how much area pe perimeter is bounding:}
+\textbf{Circularity}. Another title of this shape factor is the isoperimetric quotient, and it shows how much area pe perimeter is bounding:
 
 \begin{equation}
 	f_{circ} = \frac{4 \pi A}{P^2},

@@ -1,9 +1,11 @@
 %!TEX root = paper.tex
 \section{Introduction}
-%\indent{\indent The need for agricultural products is %increasing every day, as the population of planet %Earth is growing. Part of the work is done by people, %and the forces go to quality control of crops grown. %We will be able to use temporary and natural resources %more carefully and economically, increase yields if we %learn to differentiate noble crops and distinguish %them from weeds without human help. }
 
 \indent{\indent The demand for agricultural products is increasing day by day, as the population of the Earth is growing. Even though people are working on plant classification algorithms, approaches are still not as robust as desired. A significant part of work has still been done by people. The question arises of the efficiency with which human resources are used. We will use exhaustible natural resources wisely and increase harvests if we automatize quality assurance, which objectives are to detect and distinguish weeds among the variety of crop seedlings.}
 
 \indent{ All this naturally leads to the idea of automation of the classification process with the help of machine learning algorithms. From recent experience, neural networks are well suited for image processing, but we have to pay for it with computational costs. On the other hand, we could use less costly algorithms, but they require finer tuning to achieve a comparable result.}
+
+\indent{ A feature-based method is a popular approach in the image classification task, there are many advantages and results with a good performance in many related pieces of research, as in \cite{feature2018select}, \cite{hal2008features}. The main idea of the method is to process the only relevant information on an image, and to reduce the feauture space dimension as much as possible. Likewise, dimensionality reduction is the way of solving the curse of dimensionality problem, introduced by Richard Bellman in 1957 \cite{Bellman1957dimcurse}. The implementation of th suggested method is described in   }
+
 
 \indent{ The goal is to implement segmentation and classification of a specific type of data set for low time and computational complexity. In this paper, we will research binary classifiers'  capabilities on the dataset \cite{giselsson2017public} consisting of images of 12 species and containing the most common weed species in Danish agriculture.}

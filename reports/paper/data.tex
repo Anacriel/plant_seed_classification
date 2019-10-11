@@ -6,7 +6,7 @@
 \indent{The dataset contains 960 unique plant images of 12 species. The sizes of plant classes are not balanced among themselves - they range from 221 to 654 labeled samples for each class. Original images are cropped by plant boundaries, but their resolutions vary from 50x50px to 2000x2000px. Also, images have a different background - some of them on the ground, other on the marked paper.}
 \begin{figure}[h]
     \centering
-    \includegraphics[height=7.5cm, width=10cm]{first_view_grid_1}
+    \includegraphics[height=8.5cm, width=10.5cm]{first_view_grid_smaller_1}
     \caption{Data overview}
     \label{fig:1}
 \end{figure}
@@ -43,21 +43,7 @@
 
 \indent{Such drawbacks can be eliminated with the morphological operations –– nonlinear transformations associated with the shape and structure of image. The morphology is used to study the interaction of an image with a specific structural element –– the kernel. The kernel iterates over the entire image and compares with the neighborhood of the pixels after which we apply morphological operations \cite{friel2000imanalysis}.}
 
-\indent{To improve segmentation, we use the operation of morphological closure –– a combination of dilatation (Fig. \ref{fig:dilation}) and erosion (Fig. \ref{fig:erosion}) operations.}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[height=5cm, width=10cm]{dilation}
-    \caption{3x3 square core dilation}
-    \label{fig:dilation}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[height=5cm, width=10cm]{erosion}
-    \caption{3x3 square core erosion}
-    \label{fig:erosion}
-\end{figure}
+\indent{To improve segmentation, we use the operation of morphological closure –– a combination of dilatation and erosion operations.}
 
 \indent{Then we apply the morphological closure operation to the image (Fig. \ref{fig:seg_no_closure_good_1}) by selecting an elliptical core of 6x6px size and delete the remaining objects with an area of less than 160px. The plant on the image (Fig. \ref{fig:seg_with_closure_bad_1}) has no cavities, and the background is cleared of non-plant elements. But morphological closure does not always improve the segmentation result. Estimate the result of working on an image of the class Loose silky-bent. It is noticeable (Fig. \ref{fig:seg_degradation}) that the cavities corresponding to the background were restored, which does not correspond to the desired result. We restrict ourselves to the removal of objects whose contours limit a small area.}
 
