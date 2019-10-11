@@ -1,5 +1,6 @@
 %!TEX root = paper.tex
 \section{Results}
+\subsection{Metric}
 
 \indent{\indent Results of classification are evaluated on a micro-averaged F-score. Given the positive and negative rates for each class, the resulting score is computed the following way:}
 
@@ -21,7 +22,7 @@ where $C$ –– set of the plants classes
 
 \indent{The classificator result is shown in the table \ref{table:metrics}}. \\
 
-\begin{table}
+\begin{table}[h!]
     \caption{Detailed metrics for SVM classificator}
     \begin{center}
         \begin{tabular}{lccc}
@@ -48,3 +49,23 @@ where $C$ –– set of the plants classes
     \end{center}
 \end{table}
 
+\subsection{Models comparison}
+
+\indent{\indent The choice of the SVM is justified by better results in comparison with other classical methods of machine learning. Table \ref{table:metrics_all} shows micro-averaged F-scores for Naive Bayes, k-nearest neighbours and Decision tree classifiers. The methods are implemented in Scikit-learn (\cite{scikit2011python}) library. All the experiments were conducted 100 times each, on shuffled data, the metrics were obtained by testing on a validation sample and averaged.}
+
+\begin{table}[h!]
+    \caption{Metrics for used classificators}
+    \begin{center}
+        \begin{tabular}{lc}
+            \toprule
+            \textbf{Method} & \textbf{Micro-averaged F-score} \\
+            \midrule
+            naiveBayes & 0.72 \\
+            kNN & 0.84 \\
+            decisionTree & 0.73 \\
+            \textbf{SVM} & \textbf{0.885} \\
+            \bottomrule
+            \label{table:metrics_all}
+        \end{tabular}
+    \end{center}
+\end{table}
