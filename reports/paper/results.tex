@@ -20,7 +20,7 @@ where $C$ is a set of the plant classes
 
 \indent{ The choice of such a metric is supported by the fact that classes are imbalanced. In this case, the influence of classes decreases due to averaging by classification characteristics, not by F-scores.}
 
-\indent{The classificator result is shown in Table \ref{table:metrics}}. \\
+\indent{The classificator result is shown in Table \ref{table:metrics}. The worst classification we received at Black-grass class. }. \\
 
 \begin{table}[h!]
     \caption{Detailed metrics for SVM classificator}
@@ -51,7 +51,7 @@ where $C$ is a set of the plant classes
 
 \subsection{Models comparison}
 
-\indent{\indent The choice of the SVM is justified by better results in comparison with other classical methods of machine learning. Table \ref{table:metrics_all} shows micro-averaged F-scores for Naive Bayes, k-nearest neighbours and Decision tree classifiers. These methods are implemented in Scikit-learn (\cite{scikit2011python}) library. All the experiments are conducted 100 times each; on shuffled data, these metrics are obtained by testing on a validation sample and averaged.}
+\indent{\indent The choice of the SVM is justified by better results in comparison with other classical methods of machine learning. Table \ref{table:metrics_all} shows micro-averaged F-scores for Naive Bayes, k-nearest neighbours and Decision tree classifiers. The Naive Bayes showed the worst results due to the fact that he is sensitive to the correlation between features. The decision tree worked out significantly worse than SVM, because we used the RBF kernel in SVM. Since the k-nearest neighbours algorithm is insensitive to nonlinear data, the result is as high as SVM. These methods are implemented in Scikit-learn (\cite{scikit2011python}) library. All the experiments are conducted 100 times each; on shuffled data, these metrics are obtained by testing on a validation sample and averaged.}
 
 \begin{table}[h!]
     \caption{Metrics for used classificators}
