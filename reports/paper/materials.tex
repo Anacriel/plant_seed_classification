@@ -4,23 +4,23 @@
 
 \subsection{Feature selection}
 
-\indent{\indent Features of the images define their content. We recognize the information images provide us in consideration of a great number of features. Then we answer, what do we see exactly. The same process can be projected on the image classification task: image features let the classifier propose the output decision. Another advantage of the approach is that it reduces feature space for a machine learning algorithm. We often need only a piece of the information image provides, hence we do not need to process and evaluate all the pixels, which can cause additional computational expenses.}
+\indent{\indent The features of images define their content. Consideration of a great number of features helps us to recognize the information better. Image features let the classifier propose the output decision. Another advantage of the approach is that it reduces feature space for a machine learning algorithm. We often need only a part of the information on the image, hence we do not need to process and evaluate all the pixels, which can cause additional computational expenses.}
 
 \indent{ Selecting features is a complicated and convoluted research area itself, the statement is supported by the variety of feature types, and the need of presenting essential properties on an equal basis with the previous assertion.}
 
-\indent{ As discussed before, we need to define the set of features describing the dataset in the best way. Supposed features must satisfy the following criterion:}
+\indent{The goal is to define the set of features describing the dataset in the best way. Supposed features must satisfy the following criteria:}
 
-\begin{itemize}
+\begin{enumerate}
     \item The feature space should be low-dimensional
-    \item The features should correlate or correlate as little as possible
+    \item The features should not correlate or correlate as little as possible
     \item Selected features should represent the content of an image as fully as possible
-\end{itemize}
+\end{enumerate}
 
-\indent{ We are going to group selected features and define them.}
+\indent{ Now we are going to define the selected features.}
 
 \subsection{Color features}
 
-\indent{\indent Overviewing the dataset, we can notice that all the plant species are mostly green. Additionally, images were recorded under specific conditions. We will use RGB color model, which stands for red, green, and blue colors, and calculate features described below.}
+\indent{\indent Overviewing the dataset, we notice that all the plant species are mostly green. Additionally, their images are recorded under specific conditions. We use RGB color model, which stands for red, green, and blue colors, and calculate features described below.}
 
 \begin{figure}[h]
     \centering
@@ -29,7 +29,7 @@
     \label{fig:2}
 \end{figure}
 
-\indent{Let $\{x^{(k)}\}_{i=1}^N$, where $k = 1, 2, 3 $ –– an index of a channel in RGB color space respectively, $N$ –– total number of the image pixels, $x^{(k)}_i$ –– $i$-th pixel of the $k$-th channel. We will compute sample mean and standard deviation for each channel:}
+\indent{Let $\{x^{(k)}\}_{i=1}^N$, where $k = 1, 2, 3 $ is an index of a channel in the RGB color space, respectively; $N$ is a total number of the image pixels; $x^{(k)}_i$ is an $i$-th pixel of the $k$-th channel. Next, compute the sample mean and standard deviation for each channel:}
 
 \begin{equation}
 	\label{eq:1}
@@ -43,19 +43,19 @@
 
 \subsection{Shape features}
 
-\indent{\indent The one widely-used approach to retrieve shape features is to detect and analyze bounding contours. We will use the boundary tracing algorithm for the boundary extraction. The designated algorithm \cite{cv1985contours} was implemented in the OpenCV \cite{opencv2000python} library for the Python programming language. The studies did not take into account contours bounding areas below a certain threshold, which was empirically chosen.
+\indent{\indent A widely-used approach to retrieve shape features is to detect and analyze bounding contours. Here we use the boundary tracing algorithm for the boundary extraction. The designated algorithm \cite{cv1985contours} is implemented in the OpenCV \cite{opencv2000python} library for the Python programming language. The studies do not take into account the contours bounding areas below a certain threshold, which is empirically chosen.}
 
-\indent{ Let $K$ be the number of detected bounding contours above the threshold in the further contour-related characteristics.}
+\indent{ Let $K$ be a number of detected bounding contours above the threshold in the further contour-related characteristics.}
 
 \vspace{1cm}
 
-\textbf{Total perimeter}. In this feature, we will count the sum of perimeters of all the areas bounded by contours:
+\textbf{Total perimeter}. For this feature, we count the sum of perimeters of all the areas bounded by contours:
 
 \begin{equation}
 	\label{eq:3}
 	 P = \sum_{i=1}^{K}p_i,
 \end{equation}
-where $p_i$ –– $i$-th perimeter
+where $p_i$ is an $i$-th perimeter.
 
 \vspace{1cm}
 
@@ -65,39 +65,39 @@ where $p_i$ –– $i$-th perimeter
 	\label{eq:4}
 	 S = \sum_{i=1}^{K}s_i,
 \end{equation}
-where $s_i$ –– $i$-th area
+where $s_i$ is an $i$-th area.
 
 \vspace{1cm}
 
-\textbf{Maximal contour area}. We will be analyzing the contours bounding maximal areas:
+\textbf{Maximal contour area}. Here, we analyze the contours bounding maximal areas:
 
 \begin{equation}
 	\label{eq:5}
-	 S_m = \max{s_i}, \; i = 1, \dots, K,
+	 S_m = \max{s_i}, \; i = 1, \dots, K.
 \end{equation}
 where $s_i$ –– $i$-th area
 
 \vspace{1cm}
 
-\textbf{Rectangularity}. One of the methods to estimate rectangularity is to plot minimum bounding rectangle. Rectangularity is the ratio of the entire obect area to the minimum bounding rectangle area. This featere represent how rectangular an object is:
+\textbf{Rectangularity}. One of the methods to estimate rectangularity is to plot minimum bounding rectangle. Rectangularity is the ratio of the entire object area to the minimum bounding rectangle area. This feature represents how rectangular an object is:
 
 \begin{equation}
 	f_{rect} = \frac{S}{S_{MBR}},
 	\label{eq:6}
 \end{equation}
-where $S$ –– entire area, $S_{MBR}$ –– minimum bounding rectangle area
+where $S$ is the entire area, $S_{MBR}$ is the minimum bounding rectangle area.
 
 \vspace{1cm}
 
-\textbf{Circularity}. Another title of this shape factor is the isoperimetric quotient, and it shows how much area pe perimeter is bounding:
+\textbf{Circularity}. Another title of this shape factor is the isoperimetric quotient, and it shows how much area per perimeter is bounded:
 
 \begin{equation}
 	f_{circ} = \frac{4 \pi A}{P^2},
 	\label{eq:7}
 \end{equation}
-where $P$ –– entire perimeter, $A$ –– entire area of all detected elements of a plant
+where $P$ is an entire perimeter; $A$ is an entire area of all detected elements of a plant.
 
-\indent{ Consider the correlation matrix of the described features:}
+\indent{ The correlation matrix of the described features has the form:}
 
 \begin{figure}[h]
 	\centering
@@ -106,17 +106,12 @@ where $P$ –– entire perimeter, $A$ –– entire area of all detected elemen
 	\label{fig_corr_matrix}
 \end{figure}
 
-\indent{ Based on the data in the figure \ref{fig_corr_matrix}, we conclude that the most linearly dependent features are the entire area and the largest area, but this is not true for all classes due to the predominance of plants, bounded by the only one contour, therefore the consideration of the maximum area feature is not rejected.}
+\indent{ Based on the data in Fig. \ref{fig_corr_matrix}, we conclude that the most linearly dependent features are the entire area and the largest area. This is not true for all classes due to the predominance of plants bounded by the only one contour. Therefore, the largest area feature is not rejected.}
 
 \subsection{Classification}
-\indent{\indent The main method for this task is Support Vector Machine (SVM) –– a binary classification algorithm based on building a separating hyperplane. The algorithm is implemented in the Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
+\indent{\indent The main method for solving this task is the Support Vector Machine (SVM), a binary classification algorithm based on building a separating hyperplane. The other methods we apply are K-Nearest Neighbors \cite{k2007nearest}, Naive Bayes \cite{naive2001bayes} and Decision Tree \cite{breiman1984classification} classifiers. These algorithms are implemented in the Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
 
-\indent{We will use the Radial Basis Function (RBF) as the kernel function for SVM. The choice was made based on the following advantages:}
+\indent{ We will use the Radial Basis Function (RBF) as the kernel function for SVM. The choice is made based on the following advantages. RBF allows to build a hyperplane when the data is not linearly separable. }
 
-\begin{itemize}
-	\item RBF usage allows building a hyperplane when the data is not linearly separable
-	\item Only one parameter that affects the resulting solution needs to be tuned
-	\item The values of the RBF function are in $(0, 1]$, which does not include zero or infinity
-\end{itemize}
 
-\indent{ The SVM algorithm is sensitive to non-normalized data, especially when using the RBF kernel, which is the Euclidian distance itself. In the case, when the feature values are at different intervals, a slight difference in one of them can lead to going out of range in second feature values. The solution is to map all the values into one segment. In this task, we will choose $[0, 1]$.}
+\textbf{Data normalization}. The SVM algorithm is sensitive to non-normalized data, especially when using the RBF kernel, which is the Euclidian distance itself. In the case when the feature values are at different intervals, a slight difference in one of them can lead to going out of range in second feature values. The solution is to map all the values into one segment. In this task, we will choose $[0, 1]$.

@@ -2,7 +2,7 @@
 \section{Results}
 \subsection{Metric}
 
-\indent{\indent Results of classification are evaluated on a micro-averaged F-score. Given the positive and negative rates for each class, the resulting score is computed the following way:}
+\indent{\indent Results of classification are evaluated by the micro-averaged F-score. Given the positive and negative rates for each class, the resulting score is computed as follows:}
 
 \begin{equation}
     Precision_{micro} = \frac{\sum_{k \in C} TP_k}{\sum_{k \in C} TP_k + FP_k}, \;\;
@@ -14,13 +14,13 @@
     F_{micro} = \frac{2*Precision_{micro}*Recall_{micro}}{Precision_{micro} + Recall_{micro}},
     \label{eq:mic_f1}
 \end{equation}
-where $C$ –– set of the plants classes
+where $C$ is a set of the plant classes
 
 \vspace{1cm}
 
 \indent{ The choice of such a metric is supported by the fact that classes are imbalanced. In this case, the influence of classes decreases due to averaging by classification characteristics, not by F-scores.}
 
-\indent{The classificator result is shown in the table \ref{table:metrics}}. \\
+\indent{The classificator result is shown in Table \ref{table:metrics}}. \\
 
 \begin{table}[h!]
     \caption{Detailed metrics for SVM classificator}
@@ -51,7 +51,7 @@ where $C$ –– set of the plants classes
 
 \subsection{Models comparison}
 
-\indent{\indent The choice of the SVM is justified by better results in comparison with other classical methods of machine learning. Table \ref{table:metrics_all} shows micro-averaged F-scores for Naive Bayes, k-nearest neighbours and Decision tree classifiers. The methods are implemented in Scikit-learn (\cite{scikit2011python}) library. All the experiments were conducted 100 times each, on shuffled data, the metrics were obtained by testing on a validation sample and averaged.}
+\indent{\indent The choice of the SVM is justified by better results in comparison with other classical methods of machine learning. Table \ref{table:metrics_all} shows micro-averaged F-scores for Naive Bayes, k-nearest neighbours and Decision tree classifiers. These methods are implemented in Scikit-learn (\cite{scikit2011python}) library. All the experiments are conducted 100 times each; on shuffled data, these metrics are obtained by testing on a validation sample and averaged.}
 
 \begin{table}[h!]
     \caption{Metrics for used classificators}
