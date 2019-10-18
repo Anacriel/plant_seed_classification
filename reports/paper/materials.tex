@@ -111,7 +111,7 @@ where $P$ is an entire perimeter; $A$ is an entire area of all detected elements
 \subsection{Classification}
 \indent{\indent The main method for solving this task is the Support Vector Machine (SVM), a binary classification algorithm based on building a separating hyperplane. The other methods we apply are the K-Nearest Neighbors \cite{k2007nearest}, Naive Bayes \cite{naive2001bayes} and Decision Tree \cite{breiman1984classification} classifiers. These algorithms are implemented in the Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
 
-\indent{ We will use the Radial Basis Function (RBF) as the kernel function for SVM. This choice is made because the RBF allows to build a hyperplane when the data is not linearly separable. }
+\indent{ We use the Radial Basis Function (RBF) as the kernel function for SVM. This choice is made because the RBF allows to build a hyperplane when the data is not linearly separable. }
 
 
 \textbf{Data normalization}. The SVM algorithm is sensitive to non-normalized data, especially when using the RBF kernel, which is just the Euclidian distance. In the case when the feature values are at different intervals, a slight difference in one of them can lead to going out of range in second feature values. The solution is to map all the values into one segment. In this task, we choose the segment $[0, 1]$.
