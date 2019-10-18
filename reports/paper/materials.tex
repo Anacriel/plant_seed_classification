@@ -20,7 +20,7 @@
 
 \subsection{Color features}
 
-\indent{\indent Overviewing the dataset, we notice that all the plant species are mostly green. Additionally, their images are recorded under specific conditions. We use RGB color model, which stands for red, green, and blue colors, and calculate features described below.}
+\indent{\indent Overviewing the dataset, we notice that all the plant species are mostly green. Additionally, their images are recorded under specific conditions. We use the RGB color model, which stands for red, green, and blue colors, and calculate features described below.}
 
 \begin{figure}[h]
     \centering
@@ -33,12 +33,12 @@
 
 \begin{equation}
 	\label{eq:1}
-	\overline{x^{(k)}} = \frac{1}{N}\sum_{i=1}^{N}x^{(k)}_i 
+	\overline{x^{(k)}} = \frac{1}{N}\sum_{i=1}^{N}x^{(k)}_i,
 \end{equation}
 
 \begin{equation}
 	\label{eq:2}
-	 s^{(k)} = \sqrt{\frac{1}{N}\sum_{i=1}^{N}(x^{(k)}_i - \overline{x^{(k)}})^2} 
+	 s^{(k)} = \sqrt{\frac{1}{N}\sum_{i=1}^{N}(x^{(k)}_i - \overline{x^{(k)}})^2}.
 \end{equation}
 
 \subsection{Shape features}
@@ -75,7 +75,7 @@ where $s_i$ is an $i$-th area.
 	\label{eq:5}
 	 S_m = \max{s_i}, \; i = 1, \dots, K.
 \end{equation}
-where $s_i$ –– $i$-th area
+
 
 \vspace{1cm}
 
@@ -109,9 +109,9 @@ where $P$ is an entire perimeter; $A$ is an entire area of all detected elements
 \indent{ Based on the data in Fig. \ref{fig_corr_matrix}, we conclude that the most linearly dependent features are the entire area and the largest area. This is not true for all classes due to the predominance of plants bounded by the only one contour. Therefore, the largest area feature is not rejected.}
 
 \subsection{Classification}
-\indent{\indent The main method for solving this task is the Support Vector Machine (SVM), a binary classification algorithm based on building a separating hyperplane. The other methods we apply are K-Nearest Neighbors \cite{k2007nearest}, Naive Bayes \cite{naive2001bayes} and Decision Tree \cite{breiman1984classification} classifiers. These algorithms are implemented in the Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
+\indent{\indent The main method for solving this task is the Support Vector Machine (SVM), a binary classification algorithm based on building a separating hyperplane. The other methods we apply are the K-Nearest Neighbors \cite{k2007nearest}, Naive Bayes \cite{naive2001bayes} and Decision Tree \cite{breiman1984classification} classifiers. These algorithms are implemented in the Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
 
-\indent{ We will use the Radial Basis Function (RBF) as the kernel function for SVM. The choice is made based on the following advantages. RBF allows to build a hyperplane when the data is not linearly separable. }
+\indent{ We will use the Radial Basis Function (RBF) as the kernel function for SVM. This choice is made because the RBF allows to build a hyperplane when the data is not linearly separable. }
 
 
-\textbf{Data normalization}. The SVM algorithm is sensitive to non-normalized data, especially when using the RBF kernel, which is the Euclidian distance itself. In the case when the feature values are at different intervals, a slight difference in one of them can lead to going out of range in second feature values. The solution is to map all the values into one segment. In this task, we will choose $[0, 1]$.
+\textbf{Data normalization}. The SVM algorithm is sensitive to non-normalized data, especially when using the RBF kernel, which is just the Euclidian distance. In the case when the feature values are at different intervals, a slight difference in one of them can lead to going out of range in second feature values. The solution is to map all the values into one segment. In this task, we choose the segment $[0, 1]$.

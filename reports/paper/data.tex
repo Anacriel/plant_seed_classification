@@ -17,7 +17,7 @@
 
 \indent{\indent \textbf{Resolution reducing}}\quad {We reduce the resolution of all images to the same resolution 200x200px using the bilinear interpolation. The main idea of the bilinear interpolation is that a new image pixel is defined as the weighted sum of neighboring pixels of the original image. It helps to decrease computational complexity and build normalized features \cite{bilinear1963interp}.}
 
-\textbf{Segmentation} \quad {The objects of our study are plants, and they are painted green. Therefore, we can create a mask that filters the range of green channel and ignores the other pixels. For these purposes, the HSV (Hue Saturation Value) color model is a suitable representation \cite{hsv1978color}. In the BGR format, the value of each component depends on the amount of light hitting the object. HSV allows us to distinguish between the image color and brightness. We set the lower and upper bounds of the green color using HSV representation. Then we merely mark the pixels in the green range and get a color mask (Fig. \ref{fig_f_ seg_step_2}). Now we apply the operation of logical multiplication to the original image, assign the value of the background pixels to a black color value, and get a segmented plant.}
+\textbf{Segmentation} \quad {The objects of our study are plants, and they are painted green. Therefore, we can create a mask that filters the range of green channel and ignores the other pixels. For these purposes, the HSV (Hue Saturation Value) color model is a suitable representation \cite{hsv1978color}. In the BGR (Blue Green Red) format, the value of each component depends on the amount of light hitting the object. HSV allows us to distinguish between the image color and brightness. We set the lower and upper bounds of the green color using HSV representation. Then we merely mark the pixels in the green range and get a color mask (Fig. \ref{fig_f_ seg_step_2}). Now we apply the operation of logical multiplication to the original image, assign the value of the background pixels to a black color value, and get a segmented plant.}
 
 \threeimage{seg_step_1}{seg_step_2}{seg_step_3}{Source image}{Mask}{Segmented image}
 
@@ -38,7 +38,7 @@
     \label{fig:seg_improve}
 \end{figure}
 
-\indent{Such drawbacks can be eliminated by the morphological operations of the nonlinear transformation associated with the shape and structure of an image. The morphology is used to study the interaction of an image with a specific structural element,  \emph{the kernel}. The kernel iterates over the entire image and compares with the neighborhood of the pixels after which we apply morphological operations \cite{friel2000imanalysis}.}
+\indent{Such drawbacks can be eliminated by the morphological operations of the nonlinear transformation associated with the shape and structure of an image. The morphology is used to study the interaction of an image with a specific structural element,  \emph{the kernel}. The kernel iterates over the entire image and compares the neighborhoods of pixels after which we apply morphological operations \cite{friel2000imanalysis}.}
 
 \indent{To improve segmentation, we use the operation of the morphological closure---a combination of the dilatation and erosion operations \cite{morph2000java}.}
 

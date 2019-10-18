@@ -20,7 +20,7 @@ where $C$ is a set of the plant classes
 
 \indent{ The choice of such a metric is supported by the fact that classes are imbalanced. In this case, the influence of classes decreases due to averaging by classification characteristics, not by F-scores.}
 
-\indent{The classification output is shown in Table \ref{table:metrics}. The worst classification result was received for the Black-grass class. This type of plant is difficult to segment on an equal basis with the Loose Silky-bent class (Fig. \ref{fig:seg_degradation}), for which result is significantly better. The Black-grass plants have purple roots, but the segmentation algorithm we use does not work properly in the purple colour values range. Another cause of the result is in the predominance of the Loose Silky-bent training data size.} \\
+\indent{The classification output is shown in Table \ref{table:metrics}. The worst classification result is received for the Black-grass class. This type of plant is difficult to segment on an equal basis with the Loose Silky-bent class (Fig. \ref{fig:seg_degradation}), for which the result is significantly better. The Black-grass plants have purple roots, but the segmentation algorithm we use does not work properly in the purple color values range. Another cause of this result is in the predominance of the Loose Silky-bent training data size.} \\
 
 \begin{table}[htb]
     \caption{Detailed metrics for SVM classificator}
@@ -51,7 +51,7 @@ where $C$ is a set of the plant classes
 
 \subsection{Models comparison}
 
-\indent{\indent The choice of the SVM is justified by better results in comparison with other classical methods of machine learning. Table \ref{table:metrics_all} shows micro-averaged F-scores for Naive Bayes, K-Nearest Neighbours and Decision Tree classifiers. The Naive Bayes showed the worst results due to the fact that it is sensitive to the correlation between features. The Decision Tree performed vastly worse than SVM, because we used the RBF kernel in SVM. This effect is called "kernel trick" \cite{kernel2008trick}, it allows us to work in another, a transformed space, where the data is linearly separable. Since the k-nearest neighbours algorithm is insensitive to nonlinear data, the result is as good as SVM. These methods are implemented in Scikit-learn (\cite{scikit2011python}) library. All the experiments are conducted 100 times each; on shuffled data, these metrics are obtained by testing on a validation sample and averaged.}
+\indent{\indent The choice of the SVM is justified by better results in comparison with other classical methods of machine learning. Table \ref{table:metrics_all} shows micro-averaged F-scores for the Naive Bayes, K-Nearest Neighbours and Decision Tree classifiers. The Naive Bayes shows the worst results because it is sensitive to the correlation between features. The Decision Tree performs vastly worse than SVM, because we use the RBF kernel in SVM. This effect is called "kernel trick" \cite{kernel2008trick}, it allows us to work in a transformed space, where the data is linearly separable. Since the k-nearest neighbours algorithm is insensitive to nonlinear data, the result is as good as SVM. These methods are implemented in Scikit-learn (\cite{scikit2011python}) library. All the experimental results are obtained using cross-validation technique.}
 
 \begin{table}[h!]
     \caption{Metrics for used classificators}
