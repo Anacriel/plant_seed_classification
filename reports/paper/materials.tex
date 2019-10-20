@@ -109,7 +109,7 @@ where $P$ is an entire perimeter; $A$ is an entire area of all detected elements
 \indent{ Based on the data in Fig. \ref{fig_corr_matrix}, we conclude that the most linearly dependent features are the entire area and the largest area. This is not true for all classes due to the predominance of plants bounded by the only one contour. Therefore, the largest area feature is not rejected.}
 
 \subsection{Classification}
-\indent{\indent The main method for solving this task is the Support Vector Machine (SVM), a binary classification algorithm based on building a separating hyperplane. The other methods we apply are the K-Nearest Neighbors \cite{k2007nearest}, Naive Bayes \cite{naive2001bayes} and Decision Tree \cite{breiman1984classification} classifiers. These algorithms are implemented in the Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
+\indent{\indent The main method for solving this task is the Support Vector Machine (SVM) \cite{svmguide2003article}, a binary classification algorithm based on building a separating hyperplane. The other methods we apply are the K-Nearest Neighbors \cite{k2007nearest}, Naive Bayes \cite{naive2001bayes} and Decision Tree \cite{breiman1984classification} classifiers. These algorithms are implemented in the Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
 
 \indent{ We use the Radial Basis Function (RBF) as the kernel function for SVM. This choice is made because the RBF allows to build a hyperplane when the data is not linearly separable. }
 
