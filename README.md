@@ -6,10 +6,10 @@ The considered dataset is a part of the database that has been recorded at the A
 
 ## Table of Contents 
 
-- [Project structure](#Project structure)
-- [Data processing](#Data processing)
-- [Classification](#Classification)
-- [Results](#Results)
+- [Project structure](##Project%20structure)
+- [Data processing](##Data%20processing)
+- [Classification](##Classification)
+- [Results](##Results)
 
 ## Project structure
 The project is organized as follows:
