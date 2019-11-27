@@ -10,6 +10,15 @@ from glob import glob
 
 
 def get_images(input_path, height=200, width=200, per_class=0):
+    """ Reads images from input_path and up-/down- scales them to specified size
+        Parameters:
+            input_path –– path to images
+            height/width –– size to up-/down- scale
+            per_class -– number of images per class you want to get
+        Returns:
+            images –– images list
+            labels –– labels names list
+    """
     images = []
     labels = []
     for class_dir_name in os.listdir(input_path):
@@ -30,7 +39,33 @@ def get_images(input_path, height=200, width=200, per_class=0):
     return images, labels
 
 
-def create_dataset_added_features(images, labels, kind):
+def prepare_images(input_path, output_path, height=200, width=200):
+    """ Reads images, resizes and writes them to the output path
+        Parameters:
+            input_path –– path to images
+            output_path –– path to processed images to save
+    """
+    for class_dir_name in os.listdir(input_path):  # total images per class
+        # handle macOS special directory
+        if '.DS_Store' != class_dir_name:
+            class_dir_path = os.path.join(input_path, class_dir_name)
+            for image_path in glob(os.path.join(class_dir_path, "*.png")):
+                image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
+                resized_img = cv2.resize(image_bgr, (height, width))
+                segmented_img = vs.segment_plant(resized_img)
+                cv2.imwrite(output_path + image_path[len(input_path):], segmented_img)
+
+
+def create_dataset(images, labels, kind):
+    """ Extracts features from images
+        Parameters:
+            images –– images to extract features from
+            labels –– images classes
+            kind –– name of the first data frame column (usually 'label' or 'title')
+        Returns:
+            df –– data frame with extracted features
+     """
+
     features_names = [kind, 'area', 'largest_area', 'number_of_elems', 'perimeter',
                       'aspect_ratio', 'circularity', 'mean_r', 'mean_g', 'mean_b',
                       'stddev_r', 'stddev_g', 'stddev_b',
@@ -53,9 +88,13 @@ def create_dataset_added_features(images, labels, kind):
         largest_area = bf.calculate_largest_contour_area(contours)
         perimeter = cv2.arcLength(cnt, True)
 
-        x, y, w, h = cv2.boundingRect(cnt)
-        aspect_ratio = 0.0 if h == 0.0 else float(w) / h
-        #rectangularity = 0.0 if area == 0.0 else w * h / area
+        # x, y, w, h = cv2.boundingRect(cnt)
+        rect = cv2.minAreaRect(cnt)
+        width = rect[1][0]
+        height = rect[1][1]
+
+        aspect_ratio = 0.0 if height == 0.0 else width / height
+        # rectangularity = 0.0 if area == 0.0 else w * h / area
         circularity = 0.0 if area == 0.0 else (perimeter ** 2) / area
 
         # Color features
@@ -70,10 +109,6 @@ def create_dataset_added_features(images, labels, kind):
         red_mean = np.mean(red_channel_plant)
         green_mean = np.mean(green_channel_plant)
         blue_mean = np.mean(blue_channel_plant)
-
-        #red_med = np.median(red_channel_plant)
-        #green_med = np.median(green_channel_plant)
-        #blue_med = np.median(blue_channel_plant)
 
         red_std = np.std(red_channel_plant)
         green_std = np.std(green_channel_plant)
@@ -95,17 +130,6 @@ def create_dataset_added_features(images, labels, kind):
         df_temp = pd.DataFrame([vector], columns=features_names)
         df = df.append(df_temp)
     return df
-
-
-def prepare_images(input_path, output_path, height=200, width=200):
-    for class_dir_name in os.listdir(input_path):  # total images per class
-        if '.DS_Store' != class_dir_name:
-            class_dir_path = os.path.join(input_path, class_dir_name)
-            for image_path in glob(os.path.join(class_dir_path, "*.png")):
-                image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
-                resized_img = cv2.resize(image_bgr, (height, width))
-                segmented_img = vs.segment_plant(resized_img)
-                cv2.imwrite(output_path + image_path[len(input_path):], segmented_img)
 
 
 def increase_brightness(image, value=30):
