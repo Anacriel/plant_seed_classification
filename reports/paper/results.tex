@@ -1,0 +1,71 @@
+%!TEX root = paper.tex
+\section{Results}
+\subsection{Metric}
+
+\indent{\indent Results of classification are evaluated by the micro-averaged F-score. Given the positive and negative rates for each class, the resulting score is computed as follows:}
+
+\begin{equation}
+    Precision_{micro} = \frac{\sum_{k \in C} TP_k}{\sum_{k \in C} TP_k + FP_k}, \;\;
+    Recall_{micro} = \frac{\sum_{k \in C} TP_k}{\sum_{k \in C} TP_k + FN_k}
+    \label{eq:PR}
+\end{equation}
+
+\begin{equation}
+    F_{micro} = \frac{2*Precision_{micro}*Recall_{micro}}{Precision_{micro} + Recall_{micro}},
+    \label{eq:mic_f1}
+\end{equation}
+where $C$ is a set of the plant classes
+
+\vspace{1cm}
+
+\indent{ The choice of such a metric is supported by the fact that classes are imbalanced. In this case, the influence of classes decreases due to averaging by classification characteristics, not by F-scores.}
+
+\indent{The classification output is shown in Table \ref{table:metrics}. The worst classification result is received for the Black-grass class. This type of plant is difficult to segment on an equal basis with the Loose Silky-bent class (Fig. \ref{fig:seg_degradation}), for which the result is significantly better. The Black-grass plants have purple roots, but the segmentation algorithm we use does not work properly in the purple color values range. Another cause of this result is in the predominance of the Loose Silky-bent training data size. One of the highest scores belongs to the Common Chickweed class (Fig. \ref{fig:f_ seg_step_1seg_step_2seg_step_3}). The segmentation algorithm demonstrates good results on these plants, because there is a definite green colour values range, which defines the entire plant. Additionally, plants of this class cover a sizable area. It decreases the chance of treating the parts of the target object as the parts of the background. } \\
+
+\begin{table}[htb]
+    \caption{Detailed metrics for SVM classificator}
+    \begin{center}
+        \begin{tabular}{lccc}
+            \toprule
+            \textbf{Type} & \textbf{Precision} & \textbf{Recall} & \textbf{F-score} \\
+            \midrule
+            Sugar beet       & 0.901 & 0.936 & 0.918 \\
+            Fat Hen          & 0.877 & 0.909 & 0.893 \\
+            Scentless Mayweed & 0.851 & 0.905 & 0.878 \\
+            Charlock         & 0.947 & 0.934 & 0.940  \\
+            Small-flowered Cranesbill & 0.963 & 0.991 & 0.977 \\
+            Maize            & 0.953 & 0.891 & 0.921   \\
+            Shepherds Purse  & 0.833 & 0.714 & 0.769 \\
+            Common Wheat     & 0.800 & 0.889 & 0.842 \\
+            Common Chickweed & 0.962 & 0.962 & 0.962 \\
+            Cleavers         & 0.885 & 0.852 & 0.868 \\
+            Loose Silky-bent & 0.828 & 0.888 & 0.857  \\
+            Black-grass      & 0.757 & 0.528 & 0.622 \\
+            \midrule
+            \multicolumn{3}{l}{Micro-averaged F-score} 0.885 \\
+            \bottomrule
+            \label{table:metrics}
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsection{Models comparison}
+
+\indent{\indent The choice of the SVM is justified by better results in comparison with other classical methods of machine learning. Table \ref{table:metrics_all} shows micro-averaged F-scores for the Naive Bayes, K-Nearest Neighbours and Decision Tree classifiers. The Naive Bayes shows the worst results because it is sensitive to the correlation between features. The Decision Tree performs vastly worse than SVM, because we use the RBF kernel in SVM. This effect is called "kernel trick" \cite{kernel2008trick}, it allows us to work in a transformed space, where the data is linearly separable. Since the k-nearest neighbours algorithm is insensitive to nonlinear data, the result is as good as SVM. These methods are implemented in Scikit-learn (\cite{scikit2011python}) library. All the experimental results are obtained using cross-validation technique \cite{crossval2009book}.}
+
+\begin{table}[h!]
+    \caption{Metrics for used classificators}
+    \begin{center}
+        \begin{tabular}{lc}
+            \toprule
+            \textbf{Method} & \textbf{Micro-averaged F-score} \\
+            \midrule
+            naiveBayes & 0.72 \\
+            kNN & 0.84 \\
+            decisionTree & 0.73 \\
+            \textbf{SVM} & \textbf{0.885} \\
+            \bottomrule
+            \label{table:metrics_all}
+        \end{tabular}
+    \end{center}
+\end{table}

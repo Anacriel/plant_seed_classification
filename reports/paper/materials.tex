@@ -1,0 +1,117 @@
+%!TEX root = paper.tex
+\section{Materials and methods}
+\input{data}
+
+\subsection{Feature selection}
+
+\indent{\indent The features of images define their content. Consideration of a great number of features helps us to recognize the information better. Image features let the classifier propose the output decision. Another advantage of the approach is that it reduces feature space for a machine learning algorithm. We often need only a part of the information on the image, hence we do not need to process and evaluate all the pixels, which can cause additional computational expenses.}
+
+\indent{ Selecting features is a complicated and convoluted research area itself, the statement is supported by the variety of feature types, and the need of presenting essential properties on an equal basis with the previous assertion.}
+
+\indent{The goal is to define the set of features describing the dataset in the best way. Supposed features must satisfy the following criteria:}
+
+\begin{enumerate}
+    \item The feature space should be low-dimensional
+    \item The features should not correlate or correlate as little as possible
+    \item Selected features should represent the content of an image as fully as possible
+\end{enumerate}
+
+\indent{ Now we are going to define the selected features.}
+
+\subsection{Color features}
+
+\indent{\indent Overviewing the dataset, we notice that all the plant species are mostly green. Additionally, their images are recorded under specific conditions. We use the RGB color model, which stands for red, green, and blue colors, and calculate features described below.}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[height=5.5cm, width=10cm]{to_rgb_sample_1}
+    \caption{RGB transformation}
+    \label{fig:2}
+\end{figure}
+
+\indent{Let $\{x^{(k)}\}_{i=1}^N$, where $k = 1, 2, 3 $ is an index of a channel in the RGB color space, respectively; $N$ is a total number of the image pixels; $x^{(k)}_i$ is an $i$-th pixel of the $k$-th channel. Next, compute the sample mean and standard deviation for each channel:}
+
+\begin{equation}
+	\label{eq:1}
+	\overline{x^{(k)}} = \frac{1}{N}\sum_{i=1}^{N}x^{(k)}_i,
+\end{equation}
+
+\begin{equation}
+	\label{eq:2}
+	 s^{(k)} = \sqrt{\frac{1}{N}\sum_{i=1}^{N}(x^{(k)}_i - \overline{x^{(k)}})^2}.
+\end{equation}
+
+\subsection{Shape features}
+
+\indent{\indent A widely-used approach to retrieve shape features is to detect and analyze bounding contours. Here we use the boundary tracing algorithm for the boundary extraction. The designated algorithm \cite{cv1985contours} is implemented in the OpenCV \cite{opencv2000python} library for the Python programming language. The studies do not take into account the contours bounding areas below a certain threshold, which is empirically chosen.}
+
+\indent{ Let $K$ be a number of detected bounding contours above the threshold in the further contour-related characteristics.}
+
+\vspace{1cm}
+
+\textbf{Total perimeter}. For this feature, we count the sum of perimeters of all the areas bounded by contours:
+
+\begin{equation}
+	\label{eq:3}
+	 P = \sum_{i=1}^{K}p_i,
+\end{equation}
+where $p_i$ is an $i$-th perimeter.
+
+\vspace{1cm}
+
+\textbf{Entire area}. It includes all the areas bounded by contours:
+
+\begin{equation}
+	\label{eq:4}
+	 S = \sum_{i=1}^{K}s_i,
+\end{equation}
+where $s_i$ is an $i$-th area.
+
+\vspace{1cm}
+
+\textbf{Maximal contour area}. Here, we analyze the contours bounding maximal areas:
+
+\begin{equation}
+	\label{eq:5}
+	 S_m = \max{s_i}, \; i = 1, \dots, K.
+\end{equation}
+
+
+\vspace{1cm}
+
+\textbf{Rectangularity}. One of the methods to estimate rectangularity is to plot minimum bounding rectangle. Rectangularity is the ratio of the entire object area to the minimum bounding rectangle area. This feature represents how rectangular an object is:
+
+\begin{equation}
+	f_{rect} = \frac{S}{S_{MBR}},
+	\label{eq:6}
+\end{equation}
+where $S$ is the entire area, $S_{MBR}$ is the minimum bounding rectangle area.
+
+\vspace{1cm}
+
+\textbf{Circularity}. Another title of this shape factor is the isoperimetric quotient, and it shows how much area per perimeter is bounded:
+
+\begin{equation}
+	f_{circ} = \frac{4 \pi A}{P^2},
+	\label{eq:7}
+\end{equation}
+where $P$ is an entire perimeter; $A$ is an entire area of all detected elements of a plant.
+
+\indent{ The correlation matrix of the described features has the form:}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12.cm, height=5.5cm]{corr_matrix_plain}
+	\caption{Feature correlation matrix}
+	\label{fig_corr_matrix}
+\end{figure}
+
+\indent{ Based on the data in Fig. \ref{fig_corr_matrix}, we conclude that the most linearly dependent features are the entire area and the largest area. This is not true for all classes due to the predominance of plants bounded by the only one contour. Therefore, the largest area feature is not rejected.}
+
+\subsection{Classification}
+\indent{\indent The main method for solving this task is the Support Vector Machine (SVM) \cite{svmguide2003article}, a binary classification algorithm based on building a separating hyperplane. The other methods we apply are the K-Nearest Neighbors \cite{k2007nearest}, Naive Bayes \cite{naive2001bayes} and Decision Tree \cite{breiman1984classification} classifiers. These algorithms are implemented in the Scikit-learn (\cite{scikit2011python}) library for the Python programming language.}
+
+\indent{ We use the Radial Basis Function (RBF) as the kernel function for SVM. This choice is made because the RBF allows to build a hyperplane when the data is not linearly separable. }
+
+
+\textbf{Data normalization}. The SVM algorithm is sensitive to non-normalized data, especially when using the RBF kernel, which is just the Euclidian distance. In the case when the feature values are at different intervals, a slight difference in one of them can lead to going out of range in second feature values. The solution is to map all the values into one segment. In this task, we choose the segment $[0, 1]$.

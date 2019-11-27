@@ -1,0 +1,95 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.20 of 2017/10/04
+%
+\documentclass[runningheads]{llncs}
+%
+\usepackage{graphicx}
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{subfigure}
+\usepackage{booktabs}
+\newcommand{\threeimage}[6]{
+\begin{figure}[h!]
+    \centering
+    \subfigure[]{
+        \includegraphics[width=0.25\linewidth, height=0.25\linewidth]{#1}
+        \label{fig_f_ #1} }
+        %\hspace{4ex}
+    \subfigure[]{
+    \includegraphics[width=0.25\linewidth, height=0.25\linewidth]{#2}
+    \label{fig_f_ #2} }
+   % \hspace{4ex}
+    \subfigure[]{
+        \includegraphics[width=0.25\linewidth, height=0.25\linewidth]{#3}
+        \label{fig_f_ #3} }
+    \caption{
+    \subref{fig_f_ #1} #4;
+    \subref{fig_f_ #2} #5;
+    \subref{fig_f_ #3} #6}
+    \label{fig:f_ #1#2#3}
+\end{figure}}
+
+% If you use the hyperref package, please uncomment the following line
+% to display URLs in blue roman font according to Springer's eBook style:
+\graphicspath{{img/}}
+\renewcommand\UrlFont{\color{blue}\rmfamily}
+
+\begin{document}
+%
+\title{Feature Based Plant Seedlings Classification}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+\author{Dmitri Jakovlev \and Iuliia Kamaletdinova \and Georgy Shevlyakov}
+% \author{First Author\inst{1}\orcidID{0000-1111-2222-3333} \and
+% Second Author\inst{2,3}\orcidID{1111-2222-3333-4444} \and
+% Third Author\inst{3}\orcidID{2222--3333-4444-5555}}
+%
+\authorrunning{D. Jakovlev et al.}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+\institute{Peter the Great Saint-Petersburg Polytechnic University, \\
+Higher School of Applied Mathematics and Computional Physics, Russia}
+
+% \email{gshevlyakova@yahoo.com}
+% \institute{Princeton University, Princeton NJ 08544, USA \and
+% Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany
+% \email{lncs@springer.com}\\
+% \url{http://www.springer.com/gp/computer-science/lncs} \and
+% ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
+% \email{\{abc,lncs\}@uni-heidelberg.de}}
+%
+\maketitle              % typeset the header of the contribution
+%
+\begin{abstract}
+    In this work, we study the application of image features in the plant classification task. The dataset was created at Aarhus University Flakkebjerg Research. It aims at different approaches in plant species categorization. In this study, the feature-based approach is used. It allows to perform classifying using less computational resources. The features usage is motivated by the following purpose: to distinguish weeds from other plants by selecting the defining features of all classes of plants. The proposed method combines image thresholding, feature selection and feature extraction for the further multiclass classification by such well-known machine learning algorithms as the Support Vector Machines, K-Nearest Neighbours, Decision Tree and Naive Bayes. To a greater extent, we use computer vision algorithms for the image processing step. The main classification method we choose for the task is the Support Vector Machines: it shows the best performance among other tested algorithms; the K-Nearest Neighbours algorithm is slightly worse.
+
+\keywords{Image processing  \and Feature extraction \and Computer vision.}
+\end{abstract}
+%
+%
+%
+
+\input{introduction}
+
+\input{materials}
+
+\input{results}
+
+\input{conclusion}
+
+% ---- Bibliography ----
+%
+% BibTeX users should specify bibliography style 'splncs04'.
+% References will then be sorted and formatted in the correct style.
+%
+\bibliographystyle{splncs04}
+
+\bibliography{mybibliography}
+
+\end{document}
