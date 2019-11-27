@@ -6,12 +6,13 @@ The considered dataset is a part of the database that has been recorded at the A
 
 ## Table of Contents 
 
-- [Project structure](##Project%20structure)
-- [Data processing](##Data%20processing)
-- [Classification](##Classification)
-- [Results](##Results)
+- Project structure
+- Data processing
+- Classification
+- Results
 
 ## Project structure
+
 The project is organized as follows:
 
     ├── data
@@ -65,6 +66,6 @@ The goal of this work is to reach good classification quality for lower processi
 4. Decision Tree
 
 ## Results
-The best reached with SVM; the Micro-averaged F-score metric is 0.89. Detailed results can be found in the paper located at reports/paper/paper.pdf
+The best reached with SVM; the Micro-averaged F-score metric is 0.89. Detailed results can be found in the paper located at [link](reports/paper/paper.pdf)
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
